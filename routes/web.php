@@ -12,7 +12,7 @@ Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth']);
 Route::get('/forum', [ForumController::class, 'index'])->middleware('auth');
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/register');
 });
 
 Route::get('/dashboard', function () {
@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
         return redirect('/student/dashboard');
     }
 
-})->middleware(['auth']);   
+})->middleware(['auth'])->name('dashboard');   
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,8 +33,31 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/forum', function () {
-    return view('student.forum');
-})->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/forum', function () {
+        return view('student.forum');
+    })->name('forum');
+
+    // Student Quiz routes
+    Route::prefix('student')->name('student.')->group(function () {
+        Route::get('/quizzes', [\App\Http\Controllers\Student\QuizController::class, 'index'])->name('quizzes.index');
+        Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Student\QuizController::class, 'show'])->name('quizzes.show');
+        Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Student\QuizController::class, 'submit'])->name('quizzes.submit');
+        Route::get('/quizzes/result/{attempt}', [\App\Http\Controllers\Student\QuizController::class, 'result'])->name('quizzes.result');
+    });
+
+    // Subscription routes
+    Route::get('/subscription', [\App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::post('/subscription/upgrade', [\App\Http\Controllers\SubscriptionController::class, 'upgrade'])->name('subscription.upgrade');
+
+    // Teacher routes
+    Route::prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('/quizzes', [\App\Http\Controllers\Teacher\QuizController::class, 'index'])->name('quizzes.index');
+        Route::get('/quizzes/create', [\App\Http\Controllers\Teacher\QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/quizzes', [\App\Http\Controllers\Teacher\QuizController::class, 'store'])->name('quizzes.store');
+        Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'show'])->name('quizzes.show');
+        Route::post('/quizzes/{quiz}/questions', [\App\Http\Controllers\Teacher\QuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
+    });
+});
 
 

@@ -21,7 +21,7 @@
             <!-- Navigation Menu -->
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link active">
+                    <a href="{{ route('dashboard') }}" class="sidebar-menu-link active">
                         <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
                         </svg>
@@ -29,28 +29,31 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
+                    <a href="{{ route('student.quizzes.index') }}" class="sidebar-menu-link">
                         <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54h5.01L11.31 8.5"/>
+                            <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
                         </svg>
-                        Tugas
+                        Kuis & Evaluasi
                     </a>
                 </li>
                 <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
+                    <a href="{{ route('subscription.index') }}" class="sidebar-menu-link">
                         <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                            <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/>
                         </svg>
-                        Sumber Daya
+                        Paket Belajar
                     </a>
                 </li>
-                <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
-                        <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-                        </svg>
-                        Pesan
-                    </a>
+                <li class="sidebar-menu-item" style="margin-top: 2rem;">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="sidebar-menu-link" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer; color: #ef4444;">
+                            <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24" style="color: #ef4444;">
+                                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </aside>
@@ -59,7 +62,22 @@
         <main class="main-content">
             <!-- Header -->
             <div class="content-header">
-                <div class="greeting">Halo, Aluna 👋</div>
+                @if(session('error'))
+                    <div style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div style="background: #dcfce7; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                <div class="greeting">
+                    Halo, {{ auth()->user()->name ?? 'Aluna' }} 👋 
+                    <span style="font-size: 0.875rem; padding: 0.25rem 0.5rem; background: {{ auth()->user()->package === 'premium' ? '#7c3aed' : '#9ca3af' }}; color: white; border-radius: 0.25rem; vertical-align: middle; margin-left: 0.5rem;">
+                        {{ strtoupper(auth()->user()->package ?? 'FREE') }}
+                    </span>
+                </div>
                 <div class="greeting-subtitle">Mari lanjutkan perjalanan belajarmu hari ini.</div>
             </div>
 

@@ -22,7 +22,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'package',
     ];
+
+    /**
+     * Check if the user has a premium package.
+     */
+    public function isPremium(): bool
+    {
+        return $this->package === 'premium';
+    }
 
     /**
      * The attributes that should be hidden for serialization.

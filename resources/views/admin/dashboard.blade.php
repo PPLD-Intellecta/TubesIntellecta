@@ -61,7 +61,10 @@
             <!-- Footer Links -->
             <div class="border-t border-purple-200 mt-auto pt-6 space-y-3">
                 <a href="#" class="block text-sm text-purple-700 hover:text-purple-900">🤝 Pusat Bantuan</a>
-                <a href="#" class="block text-sm text-purple-700 hover:text-purple-900">🚪 Keluar</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="block w-full text-left text-sm text-purple-700 hover:text-purple-900">🚪 Keluar</button>
+                </form>
             </div>
         </aside>
 
