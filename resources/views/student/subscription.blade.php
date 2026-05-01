@@ -237,10 +237,7 @@
                 @if(auth()->user()->package === 'premium')
                     <button class="btn-plan btn-current" disabled>✓ Aktif</button>
                 @else
-                    <form action="{{ route('subscription.upgrade') }}" method="POST" style="margin:0;">
-                        @csrf
-                        <button type="submit" class="btn-plan btn-popular">Upgrade ke Pro</button>
-                    </form>
+                    <a href="{{ route('subscription.checkout') }}" class="btn-plan btn-popular" style="text-decoration:none; display:block; text-align:center;">Upgrade ke Pro →</a>
                 @endif
             </div>
 
