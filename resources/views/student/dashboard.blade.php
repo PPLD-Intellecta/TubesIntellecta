@@ -90,7 +90,7 @@
                         <div class="stress-icon">⚡</div>
                         <div class="stress-value">12</div>
                         <div class="stress-label">HARI</div>
-                        <div class="stress-description">Stress Belajar</div>
+                        <div class="stress-description">Streak Belajar</div>
                     </div>
 
                     <!-- Chart -->
@@ -179,6 +179,142 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- History Belajar -->
+            <div class="courses-section">
+                <div class="section-title">Pencapaian & Riwayat Belajar</div>
+
+                <div class="courses-grid">
+                    <!-- History Belajar + Progress Tracking Card -->
+                    <div class="course-card">
+                        <div class="course-content">
+                            <div class="course-badge">HISTORY BELAJAR</div>
+                            <div class="course-title">Progress Belajar Siswa</div>
+                            <div class="course-description">
+                                Sistem menampilkan riwayat aktivitas dan persentase progres belajar siswa berdasarkan aktivitas pembelajaran.
+                            </div>
+
+                            <!-- Progress Percentage -->
+                            <div style="margin-top: 1.25rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                    <span style="font-size: 0.875rem; color: #6b7280; font-weight: 600;">Progress Keseluruhan</span>
+                                    <span style="font-size: 1.5rem; color: #7c3aed; font-weight: 800;">68%</span>
+                                </div>
+
+                                <div style="width: 100%; height: 12px; background: #ede9fe; border-radius: 999px; overflow: hidden;">
+                                    <div style="width: 68%; height: 100%; background: linear-gradient(90deg, #7c3aed, #a855f7); border-radius: 999px;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Progress Summary -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem;">
+                                <div style="background: #faf7ff; padding: 0.875rem; border-radius: 0.875rem; text-align: center;">
+                                    <div style="font-size: 1.125rem; font-weight: 800; color: #1f2937;">8/12</div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Materi Selesai</div>
+                                </div>
+
+                                <div style="background: #faf7ff; padding: 0.875rem; border-radius: 0.875rem; text-align: center;">
+                                    <div style="font-size: 1.125rem; font-weight: 800; color: #1f2937;">5/7</div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Quiz Selesai</div>
+                                </div>
+
+                                <div style="background: #faf7ff; padding: 0.875rem; border-radius: 0.875rem; text-align: center;">
+                                    <div style="font-size: 1.125rem; font-weight: 800; color: #1f2937;">3</div>
+                                    <div style="font-size: 0.75rem; color: #6b7280;">Reward</div>
+                                </div>
+                            </div>
+
+                            <!-- History List -->
+                            <div style="margin-top: 1.5rem;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #1f2937; margin-bottom: 0.875rem;">
+                                    Riwayat Aktivitas Terbaru
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div style="display: flex; justify-content: space-between; gap: 1rem; padding: 0.875rem; background: #ffffff; border: 1px solid #ede9fe; border-left: 4px solid #8b5cf6; border-radius: 0.875rem;">
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Menonton Materi</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">Aktivitas belajar hari ini berhasil dicatat.</div>
+                                        </div>
+                                        <strong style="font-size: 0.8rem; color: #7c3aed; white-space: nowrap;">Selesai</strong>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between; gap: 1rem; padding: 0.875rem; background: #ffffff; border: 1px solid #ede9fe; border-left: 4px solid #8b5cf6; border-radius: 0.875rem;">
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Mengerjakan Quiz</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">Nilai quiz memperbarui persentase progress belajar.</div>
+                                        </div>
+                                        <strong style="font-size: 0.8rem; color: #7c3aed; white-space: nowrap;">80%</strong>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between; gap: 1rem; padding: 0.875rem; background: #ffffff; border: 1px solid #ede9fe; border-left: 4px solid #8b5cf6; border-radius: 0.875rem;">
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Menyelesaikan Modul</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">Progress penyelesaian materi bertambah.</div>
+                                        </div>
+                                        <strong style="font-size: 0.8rem; color: #7c3aed; white-space: nowrap;">100%</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Streak + Reward Card -->
+                    <div class="course-card">
+                        <div class="course-content">
+                            <div class="course-badge">STREAK & REWARD</div>
+                            <div class="course-title">Gamifikasi Belajar</div>
+                            <div class="course-description">
+                                Sistem mencatat konsistensi harian dan memberikan reward ketika siswa mencapai target belajar tertentu.
+                            </div>
+
+                            <!-- Streak Box -->
+                            <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 1.25rem; border-radius: 1rem; text-align: center; margin-top: 1.25rem;">
+                                <div style="font-size: 2rem;">⚡</div>
+                                <div style="font-size: 2rem; font-weight: 800; color: #1f2937;">7</div>
+                                <div style="font-size: 0.85rem; color: #92400e; font-weight: 600;">Hari Streak belajar</div>
+                            </div>
+
+                            <!-- Reward List -->
+                            <div style="margin-top: 1.5rem;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #1f2937; margin-bottom: 0.875rem;">
+                                    Reward yang Didapat
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: #fef3c7; padding: 0.875rem; border-radius: 0.875rem;">
+                                        <div style="font-size: 1.5rem;">🏅</div>
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Streak 7 Hari</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Didapat setelah belajar 7 hari berturut-turut.</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: #ede9fe; padding: 0.875rem; border-radius: 0.875rem;">
+                                        <div style="font-size: 1.5rem;">🎯</div>
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Target Tercapai</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Didapat setelah progress belajar mencapai target.</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: #dcfce7; padding: 0.875rem; border-radius: 0.875rem;">
+                                        <div style="font-size: 1.5rem;">⭐</div>
+                                        <div>
+                                            <div style="font-size: 0.875rem; font-weight: 700; color: #1f2937;">Quiz Selesai</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Didapat setelah menyelesaikan quiz pembelajaran.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 1.25rem; padding: 0.875rem; background: #f9fafb; border-radius: 0.875rem; font-size: 0.8rem; color: #6b7280; line-height: 1.5;">
+                                Reward diberikan setelah sistem memvalidasi pencapaian siswa, seperti menyelesaikan quiz dengan nilai baik atau menjaga streak belajar.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Courses Section -->
             <div class="courses-section">
@@ -216,7 +352,7 @@ console.log(data)</div>
                     <div class="stress-icon">⚡</div>
                     <div class="stress-value-small">12</div>
                     <div class="stress-label-small">Hari</div>
-                    <div class="stress-description">Stress Belajar</div>
+                    <div class="stress-description">Streak Belajar</div>
                 </div>
                 <div style="background: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
                     <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.5;">
