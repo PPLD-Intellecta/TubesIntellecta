@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paket_berlangganan', function (Blueprint $table) {
+        Schema::create('paket_user_fitur', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_paket');
-            $table->integer('harga');
-            $table->integer('durasi_hari');
-            $table->text('deskripsi')->nullable();
-            $table->boolean('status')->default(true);
+            $table->foreignId('paket_user_id')->constrained('paket_users')->onDelete('cascade');
+            $table->foreignId('fitur_id')->constrained('fiturs')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paket_berlangganan');
+        Schema::dropIfExists('paket_user_fitur');
     }
 };
