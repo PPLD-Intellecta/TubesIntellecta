@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Student\ForumController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\PaketBerlanggananController;
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth']);
@@ -13,6 +14,7 @@ Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
 Route::get('/forum', [ForumController::class, 'index'])->middleware('auth');
 Route::get('/', function () {
     return redirect('/register');
+Route::resource('paket-berlangganan', PaketBerlanggananController::class);
 });
 
 Route::get('/dashboard', function () {
