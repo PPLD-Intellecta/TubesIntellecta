@@ -7,8 +7,10 @@ use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\PaketBerlanggananController;
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->middleware(['auth']);
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('videos', \App\Http\Controllers\Admin\VideoController::class)->except(['show']);
+});
 Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth']);
 Route::get('/forum', [ForumController::class, 'index'])->middleware('auth');
@@ -46,6 +48,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Student\QuizController::class, 'show'])->name('quizzes.show');
         Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Student\QuizController::class, 'submit'])->name('quizzes.submit');
         Route::get('/quizzes/result/{attempt}', [\App\Http\Controllers\Student\QuizController::class, 'result'])->name('quizzes.result');
+        
+        // Student Video routes
+        Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
+        Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])->name('videos.show');
     });
 
     // Subscription routes
