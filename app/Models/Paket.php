@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fitur extends Model
+class Paket extends Model
 {
     protected $fillable = [
         'nama',
-        'kode',
         'deskripsi',
     ];
 
-    public function pakets()
+    public function fiturs()
     {
-        return $this->belongsToMany(Paket::class, 'fitur_paket');
+        return $this->belongsToMany(Fitur::class, 'fitur_paket');
     }
 }

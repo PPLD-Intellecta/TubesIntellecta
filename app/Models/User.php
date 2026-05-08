@@ -32,6 +32,22 @@ class User extends Authenticatable
     {
         return $this->package === 'premium';
     }
+    public function paket()
+    {
+        return $this->belongsTo(\App\Models\Paket::class);
+    }
+
+    public function punyaAkses($kodeFitur)
+    {
+        if (!$this->paket) {
+            return false;
+        }
+
+        return $this->paket
+            ->fiturs()
+            ->where('kode', $kodeFitur)
+            ->exists();
+    }
 
     /**
      * The attributes that should be hidden for serialization.
