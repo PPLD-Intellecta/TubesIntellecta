@@ -23,11 +23,15 @@ Route::get('/dashboard', function () {
 
     if (auth()->user()->role == 'admin') {
         return redirect('/admin/dashboard');
-    } else {
-        return redirect('/student/dashboard');
     }
 
-})->middleware(['auth'])->name('dashboard');   
+    if (auth()->user()->role == 'teacher') {
+        return redirect('/teacher/quizzes');
+    }
+
+    return redirect('/student/dashboard');
+
+})->middleware(['auth'])->name('dashboard'); 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
