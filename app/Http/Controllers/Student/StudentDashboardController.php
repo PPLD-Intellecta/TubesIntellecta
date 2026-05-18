@@ -45,19 +45,20 @@ class StudentDashboardController extends Controller
 
         $weeklyAttempts = QuizAttempt::where('user_id', $userId)
         ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-        ->selectRaw("strftime('%w', created_at) as day_number, COUNT(*) as total")
+        ->selectRaw("DAYOFWEEK(created_at) as day_number, COUNT(*) as total")
         ->groupBy('day_number')
         ->pluck('total', 'day_number')
         ->toArray();
 
+        // MySQL DAYOFWEEK(): 1=Sunday, 2=Monday, 3=Tuesday, ..., 7=Saturday
         $weeklyProgress = [
-            ['label' => 'SEN', 'total' => $weeklyAttempts[1] ?? 0],
-            ['label' => 'SEL', 'total' => $weeklyAttempts[2] ?? 0],
-            ['label' => 'RAB', 'total' => $weeklyAttempts[3] ?? 0],
-            ['label' => 'KAM', 'total' => $weeklyAttempts[4] ?? 0],
-            ['label' => 'JUM', 'total' => $weeklyAttempts[5] ?? 0],
-            ['label' => 'SAB', 'total' => $weeklyAttempts[6] ?? 0],
-            ['label' => 'MIN', 'total' => $weeklyAttempts[0] ?? 0],
+            ['label' => 'SEN', 'total' => $weeklyAttempts[2] ?? 0],
+            ['label' => 'SEL', 'total' => $weeklyAttempts[3] ?? 0],
+            ['label' => 'RAB', 'total' => $weeklyAttempts[4] ?? 0],
+            ['label' => 'KAM', 'total' => $weeklyAttempts[5] ?? 0],
+            ['label' => 'JUM', 'total' => $weeklyAttempts[6] ?? 0],
+            ['label' => 'SAB', 'total' => $weeklyAttempts[7] ?? 0],
+            ['label' => 'MIN', 'total' => $weeklyAttempts[1] ?? 0],
         ];
 
         $maxWeeklyActivity = collect($weeklyProgress)->max('total');
