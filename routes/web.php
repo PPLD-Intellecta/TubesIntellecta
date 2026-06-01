@@ -5,15 +5,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Student\ForumController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ForumController as AdminForumController;
 use App\Http\Controllers\PaketBerlanggananController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('videos', \App\Http\Controllers\Admin\VideoController::class)->except(['show']);
+
+    // Admin Forum Moderation (FR-17)
+    Route::get('/forum', [AdminForumController::class, 'index'])->name('forum.index');
+    Route::delete('/forum/chat/{chat}', [AdminForumController::class, 'destroyChat'])->name('forum.chat.destroy');
+    Route::delete('/forum/{forum}', [AdminForumController::class, 'destroyForum'])->name('forum.destroy');
 });
 Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth']);
-Route::get('/forum', [ForumController::class, 'index'])->middleware('auth');
+
 Route::get('/', function () {
     return redirect('/register');
 Route::resource('paket-berlangganan', PaketBerlanggananController::class);
@@ -42,9 +48,11 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::middleware('auth')->group(function () {
-    Route::get('/forum', function () {
-        return view('student.forum');
-    })->name('forum');
+    // Forum routes (FR-09 - accessible by all users)
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::get('/forum/{forum}', [ForumController::class, 'show'])->name('forum.show');
+    Route::post('/forum/{forum}/chat', [ForumController::class, 'storeChat'])->name('forum.chat.store');
 
     // Student Quiz routes
     Route::prefix('student')->name('student.')->group(function () {
