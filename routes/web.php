@@ -73,4 +73,21 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+// Live Teaching Class Schedule Routes
+Route::prefix('teacher')->middleware(['auth', 'role:teacher'])->group(function () {
+    Route::get('/live-sessions', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'index'])->name('teacher.live-sessions.index');
+    Route::get('/live-sessions/create', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'create'])->name('teacher.live-sessions.create');
+    Route::post('/live-sessions', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'store'])->name('teacher.live-sessions.store');
+    Route::get('/live-sessions/{session}/edit', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'edit'])->name('teacher.live-sessions.edit');
+    Route::put('/live-sessions/{session}', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'update'])->name('teacher.live-sessions.update');
+    Route::delete('/live-sessions/{session}', [\App\Http\Controllers\Teacher\TeacherSessionController::class, 'destroy'])->name('teacher.live-sessions.destroy');
+});
+
+Route::prefix('student')->middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/live-schedule', [\App\Http\Controllers\Student\StudentSessionController::class, 'index'])->name('student.live-schedule.index');
+    Route::get('/live-sessions/{session}', [\App\Http\Controllers\Student\StudentSessionController::class, 'show'])->name('student.live-sessions.show');
+    Route::post('/live-sessions/{session}/join', [\App\Http\Controllers\Student\StudentSessionController::class, 'join'])->name('student.live-sessions.join');
+});
+
+
 
