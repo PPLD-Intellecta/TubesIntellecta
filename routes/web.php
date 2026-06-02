@@ -17,6 +17,10 @@ Route::get('/dashboard', function () {
         return redirect('/admin/dashboard');
     }
 
+    if (auth()->user()->role == 'teacher') {
+        return redirect('/teacher/quizzes');
+    }
+
     return redirect('/student/dashboard');
 })->middleware(['auth'])->name('dashboard');
 
