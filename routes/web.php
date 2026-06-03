@@ -92,4 +92,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
+// Akhir dari file web routes
