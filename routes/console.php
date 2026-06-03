@@ -9,3 +9,10 @@ Artisan::command('inspire', function () {
 
 use Illuminate\Support\Facades\Schedule;
 Schedule::command('sessions:update-status')->everyMinute();
+
+// Auto-mark overdue study goals daily at 00:00 WIB
+Schedule::call(function () {
+    \App\Models\StudyGoal::where('target_date', '<', now()->timezone('Asia/Jakarta')->toDateString())
+        ->whereIn('status', ['pending', 'in_progress'])
+        ->update(['status' => 'overdue']);
+})->dailyAt('00:00');

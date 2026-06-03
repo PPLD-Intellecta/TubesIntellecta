@@ -6,6 +6,7 @@ use App\Http\Controllers\Student\ForumController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\PaketBerlanggananController;
+use App\Http\Controllers\Student\StudyPlannerController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -87,6 +88,15 @@ Route::prefix('student')->middleware(['auth', 'role:student'])->group(function (
     Route::get('/live-schedule', [\App\Http\Controllers\Student\StudentSessionController::class, 'index'])->name('student.live-schedule.index');
     Route::get('/live-sessions/{session}', [\App\Http\Controllers\Student\StudentSessionController::class, 'show'])->name('student.live-sessions.show');
     Route::post('/live-sessions/{session}/join', [\App\Http\Controllers\Student\StudentSessionController::class, 'join'])->name('student.live-sessions.join');
+
+    // Study Planner routes
+    Route::get('/study-planner', [StudyPlannerController::class, 'index'])->name('student.planner.index');
+    Route::post('/study-planner/goals', [StudyPlannerController::class, 'storeGoal'])->name('student.planner.goals.store');
+    Route::put('/study-planner/goals/{goal}', [StudyPlannerController::class, 'updateGoal'])->name('student.planner.goals.update');
+    Route::delete('/study-planner/goals/{goal}', [StudyPlannerController::class, 'destroyGoal'])->name('student.planner.goals.destroy');
+    Route::post('/study-planner/goals/{goal}/toggle', [StudyPlannerController::class, 'toggleGoal'])->name('student.planner.goals.toggle');
+    Route::post('/study-planner/checkins', [StudyPlannerController::class, 'storeCheckin'])->name('student.planner.checkins.store');
+    Route::get('/study-planner/calendar-data', [StudyPlannerController::class, 'calendarData'])->name('student.planner.calendar.data');
 });
 
 

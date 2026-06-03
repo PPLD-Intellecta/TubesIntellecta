@@ -34,6 +34,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the study goals for the user.
+     */
+    public function studyGoals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudyGoal::class, 'student_id');
+    }
+
+    /**
+     * Get the daily checkins for the user.
+     */
+    public function dailyCheckins(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DailyCheckin::class, 'student_id');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
