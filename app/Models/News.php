@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+// Model untuk mengelola data berita dan pengumuman
 class News extends Model
 {
     protected $fillable = [
