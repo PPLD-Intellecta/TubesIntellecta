@@ -5,15 +5,24 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Student\ForumController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ForumController as AdminForumController;
 use App\Http\Controllers\PaketBerlanggananController;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('videos', \App\Http\Controllers\Admin\VideoController::class)->except(['show']);
+
+    // Admin Forum Moderation (FR-17)
+    Route::get('/forum', [AdminForumController::class, 'index'])->name('forum.index');
+    Route::delete('/forum/chat/{chat}', [AdminForumController::class, 'destroyChat'])->name('forum.chat.destroy');
+    Route::delete('/forum/{forum}', [AdminForumController::class, 'destroyForum'])->name('forum.destroy');
+
+    // Admin News routes
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
 });
 Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth']);
-Route::get('/forum', [ForumController::class, 'index'])->middleware('auth');
+
 Route::get('/', function () {
     return redirect('/register');
 Route::resource('paket-berlangganan', PaketBerlanggananController::class);
@@ -23,11 +32,15 @@ Route::get('/dashboard', function () {
 
     if (auth()->user()->role == 'admin') {
         return redirect('/admin/dashboard');
-    } else {
-        return redirect('/student/dashboard');
     }
 
-})->middleware(['auth'])->name('dashboard');   
+    if (auth()->user()->role == 'teacher') {
+        return redirect('/teacher/quizzes');
+    }
+
+    return redirect('/student/dashboard');
+
+})->middleware(['auth'])->name('dashboard'); 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,9 +51,11 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::middleware('auth')->group(function () {
-    Route::get('/forum', function () {
-        return view('student.forum');
-    })->name('forum');
+    // Forum routes (FR-09 - accessible by all users)
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::get('/forum/{forum}', [ForumController::class, 'show'])->name('forum.show');
+    Route::post('/forum/{forum}/chat', [ForumController::class, 'storeChat'])->name('forum.chat.store');
 
     // Student Quiz routes
     Route::prefix('student')->name('student.')->group(function () {
@@ -53,8 +68,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
         Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])->name('videos.show');
 
+        // Student Feedback routes
         Route::get('/feedbacks', [\App\Http\Controllers\Student\FeedbackController::class, 'index'])->name('feedbacks.index');
         Route::get('/feedbacks/{feedback}', [\App\Http\Controllers\Student\FeedbackController::class, 'show'])->name('feedbacks.show');
+
+        // Student News routes
+        Route::get('/news', [\App\Http\Controllers\Student\NewsController::class, 'index'])->name('news.index');
+        Route::get('/news/{news}', [\App\Http\Controllers\Student\NewsController::class, 'show'])->name('news.show');
     });
 
     // Subscription routes
@@ -78,4 +98,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
+// Akhir dari file web routes

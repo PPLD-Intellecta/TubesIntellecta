@@ -144,6 +144,13 @@
         <a href="#">Tugas</a>
         <a href="#">Sumber Daya</a>
         <a href="/forum">Pesan</a>
+        
+        @if(auth()->check() && auth()->user()->role == 'admin')
+            <a href="{{ route('admin.news.index') }}">Berita (Admin)</a>
+        @endif
+        @if(auth()->check() && auth()->user()->role == 'student')
+            <a href="{{ route('student.news.index') }}">Berita & Pengumuman</a>
+        @endif
 
         <hr>
 
