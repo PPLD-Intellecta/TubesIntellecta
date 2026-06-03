@@ -181,6 +181,7 @@
         <div class="navbar-links">
             <a href="{{ route('student.quizzes.index') }}">Courses</a>
             <a href="{{ route('subscription.index') }}">Resources</a>
+            <a href="{{ route('student.feedbacks.index') }}">Feedback</a>
             <a href="{{ route('subscription.checkout') }}" class="active">Checkout</a>
         </div>
         <div class="navbar-right">
