@@ -8,6 +8,7 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        $latestNews = \App\Models\News::latest()->take(4)->get();
+        return view('admin.dashboard', compact('latestNews'));
     }
 }

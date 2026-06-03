@@ -16,6 +16,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/forum', [AdminForumController::class, 'index'])->name('forum.index');
     Route::delete('/forum/chat/{chat}', [AdminForumController::class, 'destroyChat'])->name('forum.chat.destroy');
     Route::delete('/forum/{forum}', [AdminForumController::class, 'destroyForum'])->name('forum.destroy');
+
+    // Admin News routes
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
 });
 Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth']);
@@ -64,6 +67,10 @@ Route::middleware('auth')->group(function () {
         // Student Video routes
         Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
         Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])->name('videos.show');
+
+        // Student News routes
+        Route::get('/news', [\App\Http\Controllers\Student\NewsController::class, 'index'])->name('news.index');
+        Route::get('/news/{news}', [\App\Http\Controllers\Student\NewsController::class, 'show'])->name('news.show');
     });
 
     // Subscription routes

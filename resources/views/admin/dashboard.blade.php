@@ -54,6 +54,10 @@
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
                     Moderasi Forum
                 </a>
+                <a href="{{ route('admin.news.index') }}" class="flex items-center gap-3 px-4 py-2 text-purple-700 hover:bg-purple-100 rounded-lg text-sm">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    Berita & Pengumuman
+                </a>
             </nav>
 
             <!-- Pro Section -->
@@ -136,62 +140,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 px-4">
-                                                <div class="font-medium text-gray-900">INFORMATIKA</div>
-                                                <div class="text-xs text-gray-500">Struktur Paling Aman Untuk</div>
-                                            </td>
-                                            <td class="py-4 px-4 text-gray-600">Semua</td>
-                                            <td class="py-4 px-4 text-gray-600">Hari</td>
-                                            <td class="py-4 px-4">
-                                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">✓ Hari Ini</span>
-                                            </td>
-                                            <td class="py-4 px-4">
-                                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 px-4">
-                                                <div class="font-medium text-gray-900">Pembelajaran Karubalan Masim Gujar 2024</div>
-                                                <div class="text-xs text-gray-500">Struktur Paling Aman Untuk</div>
-                                            </td>
-                                            <td class="py-4 px-4 text-gray-600">Alisa Emily</td>
-                                            <td class="py-4 px-4 text-gray-600">Hari</td>
-                                            <td class="py-4 px-4">
-                                                <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">⏱ Menunggu</span>
-                                            </td>
-                                            <td class="py-4 px-4">
-                                                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 px-4">
-                                                <div class="font-medium text-gray-900">Pembelajaran Lali Busa Al-Ibnu</div>
-                                                <div class="text-xs text-gray-500">Struktur Paling Aman Untuk</div>
-                                            </td>
-                                            <td class="py-4 px-4 text-gray-600">Alisa Emily</td>
-                                            <td class="py-4 px-4 text-gray-600">Hari</td>
-                                            <td class="py-4 px-4">
-                                                <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">✕ Tolak</span>
-                                            </td>
-                                            <td class="py-4 px-4">
-                                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-                                            </td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="py-4 px-4">
-                                                <div class="font-medium text-gray-900">Pembelajaran Braswera Dibuka</div>
-                                                <div class="text-xs text-gray-500">Struktur Paling Aman Untuk</div>
-                                            </td>
-                                            <td class="py-4 px-4 text-gray-600">Haya Jul</td>
-                                            <td class="py-4 px-4 text-gray-600">Hari</td>
-                                            <td class="py-4 px-4">
-                                                <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">✕ Tolak</span>
-                                            </td>
-                                            <td class="py-4 px-4">
-                                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-                                            </td>
-                                        </tr>
+                                        @forelse($latestNews as $news)
+                                            <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                                <td class="py-4 px-4">
+                                                    <div class="font-medium text-gray-900">{{ Str::limit($news->title, 40) }}</div>
+                                                    <div class="text-xs text-gray-500">{{ Str::limit(strip_tags($news->content), 30) }}</div>
+                                                </td>
+                                                <td class="py-4 px-4 text-gray-600">{{ $news->created_at->locale('id')->diffForHumans() }}</td>
+                                                <td class="py-4 px-4 text-gray-600">{{ $news->created_at->format('d M Y') }}</td>
+                                                <td class="py-4 px-4">
+                                                    @if(!$news->published_at || $news->published_at <= now())
+                                                        <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">✓ Dipublish</span>
+                                                    @else
+                                                        <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">⏱ Terjadwal</span>
+                                                    @endif
+                                                </td>
+                                                <td class="py-4 px-4">
+                                                    <a href="{{ route('admin.news.edit', $news->id) }}" class="text-blue-500 hover:text-blue-700">
+                                                        Edit
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="py-4 px-4 text-center text-gray-500">Belum ada pengumuman.</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
