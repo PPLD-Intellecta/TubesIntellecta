@@ -21,6 +21,7 @@
             <div class="sidebar-subtitle">Teacher Panel</div>
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item"><a href="{{ route('teacher.quizzes.index') }}" class="sidebar-menu-link active">Kelola Kuis</a></li>
+                <li class="sidebar-menu-item"><a href="{{ route('teacher.feedbacks.index') }}" class="sidebar-menu-link">Feedback</a></li>
                 <li class="sidebar-menu-item" style="margin-top: 2rem;">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

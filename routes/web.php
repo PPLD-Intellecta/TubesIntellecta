@@ -52,6 +52,9 @@ Route::middleware('auth')->group(function () {
         // Student Video routes
         Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
         Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])->name('videos.show');
+
+        Route::get('/feedbacks', [\App\Http\Controllers\Student\FeedbackController::class, 'index'])->name('feedbacks.index');
+        Route::get('/feedbacks/{feedback}', [\App\Http\Controllers\Student\FeedbackController::class, 'show'])->name('feedbacks.show');
     });
 
     // Subscription routes
@@ -70,6 +73,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/materi', [\App\Http\Controllers\Teacher\MateriController::class, 'index'])->name('materi.index');
         Route::get('/materi/create', [\App\Http\Controllers\Teacher\MateriController::class, 'create'])->name('materi.create');
         Route::post('/materi', [\App\Http\Controllers\Teacher\MateriController::class, 'store'])->name('materi.store');
+
+        Route::resource('feedbacks', \App\Http\Controllers\Teacher\FeedbackController::class);
     });
 });
 

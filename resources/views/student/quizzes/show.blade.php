@@ -210,6 +210,7 @@
                 <a href="{{ route('student.quizzes.index') }}" class="active">My Courses</a>
                 <a href="{{ route('dashboard') }}">Dashboard</a>
                 <a href="{{ route('subscription.index') }}">Resources</a>
+                <a href="{{ route('student.feedbacks.index') }}">Feedback</a>
             </div>
         </div>
         <div class="navbar-right">
