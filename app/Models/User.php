@@ -48,6 +48,9 @@ class User extends Authenticatable
     public function dailyCheckins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DailyCheckin::class, 'student_id');
+    }
+
+    /**
      * Get all forums created by this user.
      */
     public function forums(): HasMany
