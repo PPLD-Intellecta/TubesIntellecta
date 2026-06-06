@@ -78,6 +78,7 @@
             <a href="{{ route('student.quizzes.index') }}" class="active">My Courses</a>
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <a href="{{ route('student.planner.index') }}">Study Planner</a>
+            <a href="{{ route('student.feedbacks.index') }}">Feedback</a>
         </div>
     </nav>
 

@@ -15,6 +15,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if(Auth::user()->role === 'teacher')
+                        <x-nav-link :href="route('teacher.feedbacks.index')" :active="request()->routeIs('teacher.feedbacks.*')">
+                            Feedback
+                        </x-nav-link>
+                    @endif
+                    @if(Auth::user()->role === 'student')
+                        <x-nav-link :href="route('student.feedbacks.index')" :active="request()->routeIs('student.feedbacks.*')">
+                            Feedback
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -41,12 +51,9 @@
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                            <button type="submit" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
                                 {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            </button>
                         </form>
                     </x-slot>
                 </x-dropdown>
@@ -70,6 +77,16 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if(Auth::user()->role === 'teacher')
+                <x-responsive-nav-link :href="route('teacher.feedbacks.index')" :active="request()->routeIs('teacher.feedbacks.*')">
+                    Feedback
+                </x-responsive-nav-link>
+            @endif
+            @if(Auth::user()->role === 'student')
+                <x-responsive-nav-link :href="route('student.feedbacks.index')" :active="request()->routeIs('student.feedbacks.*')">
+                    Feedback
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -87,12 +104,9 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         {{ __('Log Out') }}
-                    </x-responsive-nav-link>
+                    </button>
                 </form>
             </div>
         </div>

@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -47,6 +48,19 @@ class User extends Authenticatable
     public function dailyCheckins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DailyCheckin::class, 'student_id');
+     * Get all forums created by this user.
+     */
+    public function forums(): HasMany
+    {
+        return $this->hasMany(Forum::class);
+    }
+
+    /**
+     * Get all chat messages sent by this user.
+     */
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class);
     }
 
     /**
@@ -70,5 +84,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function sentFeedbacks()
+    {
+        return $this->hasMany(Feedback::class, 'teacher_id');
+    }
+
+    public function receivedFeedbacks()
+    {
+        return $this->hasMany(Feedback::class, 'student_id');
     }
 }

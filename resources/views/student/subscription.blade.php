@@ -176,6 +176,7 @@
             <a href="{{ route('subscription.index') }}" class="active">Resources</a>
             <a href="{{ route('student.quizzes.index') }}">Kuis Saya</a>
             <a href="{{ route('student.planner.index') }}">Study Planner</a>
+            <a href="{{ route('student.feedbacks.index') }}">Feedback</a>
         </div>
         <div class="navbar-right">
             <form method="POST" action="{{ route('logout') }}">
