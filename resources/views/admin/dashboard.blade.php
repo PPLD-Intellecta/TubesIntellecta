@@ -21,7 +21,7 @@
             <!-- Year Section -->
             <div class="mb-8">
                 <p class="text-xs font-semibold text-purple-600 uppercase">Tahun Belajar</p>
-                <p class="text-sm text-purple-900">2024 Akademi 2024</p>
+                <p class="text-sm text-purple-900">2026 Akademi 2026</p>
             </div>
 
             <!-- Navigation -->
@@ -31,13 +31,10 @@
                     Dashboard
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-2 text-purple-700 hover:bg-purple-100 rounded-lg text-sm">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
-                    Kursus Saya
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2 text-purple-700 hover:bg-purple-100 rounded-lg text-sm">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                     Tagih
                 </a>
+                <a href="{{ route('admin.videos.index') }}" class="flex items-center gap-3 px-4 py-2 text-purple-700 hover:bg-purple-100 rounded-lg text-sm font-bold bg-purple-100">
                 <a href="#" class="flex items-center gap-3 px-4 py-2 text-purple-700 hover:bg-purple-100 rounded-lg text-sm">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
                     Sumber Daya
@@ -60,22 +57,22 @@
                 </a>
             </nav>
 
-            <!-- Pro Section -->
-            <div class="border-t border-purple-200 pt-6 space-y-3">
-                <button class="w-full bg-purple-200 hover:bg-purple-300 text-purple-700 text-xs font-semibold py-3 px-4 rounded-lg transition">
-                    ⭐ Akses Pro<br/>Beli Akses CMS
-                </button>
-                <button class="w-full bg-cyan-400 hover:bg-cyan-500 text-white text-sm font-semibold py-2 rounded-full transition">
-                    ↗ Tingkatkan Pro
-                </button>
-            </div>
-
             <!-- Footer Links -->
-            <div class="border-t border-purple-200 mt-auto pt-6 space-y-3">
-                <a href="#" class="block text-sm text-purple-700 hover:text-purple-900">🤝 Pusat Bantuan</a>
+            <div class="border-t border-purple-200 mt-auto pt-6 space-y-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-purple-700 hover:bg-purple-100 rounded-xl text-sm font-semibold transition-all duration-200">
+                    <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    Pusat Bantuan
+                </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="block w-full text-left text-sm text-purple-700 hover:text-purple-900">🚪 Keluar</button>
+                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all duration-200 text-left">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Keluar
+                    </button>
                 </form>
             </div>
         </aside>
