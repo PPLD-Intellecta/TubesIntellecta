@@ -12,8 +12,13 @@
         .form-label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #374151; }
         .form-input, .form-textarea { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-family: inherit; }
         .btn-primary { background: #7c3aed; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
-        .question-card { background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; }
+        .question-card { background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .question-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .option-item { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .btn-action-edit { background: #eff6ff; color: #3b82f6; text-decoration: none; font-size: 0.875rem; padding: 0.375rem 0.875rem; border-radius: 9999px; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.375rem; border: 1px solid transparent; }
+        .btn-action-edit:hover { background: #dbeafe; border-color: #bfdbfe; color: #2563eb; }
+        .btn-action-delete { background: #fef2f2; color: #ef4444; font-size: 0.875rem; padding: 0.375rem 0.875rem; border-radius: 9999px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.375rem; border: 1px solid transparent; }
+        .btn-action-delete:hover { background: #fee2e2; border-color: #fecaca; color: #dc2626; }
     </style>
 </head>
 <body>
@@ -61,7 +66,23 @@
                 <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Daftar Pertanyaan</h3>
                 @forelse($quiz->questions as $index => $question)
                     <div class="question-card">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem;">{{ $index + 1 }}. {{ $question->question_text }}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600;">{{ $index + 1 }}. {{ $question->question_text }}</div>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <a href="{{ route('teacher.quizzes.questions.edit', [$quiz, $question]) }}" class="btn-action-edit">
+                                    <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    Edit
+                                </a>
+                                <form action="{{ route('teacher.quizzes.questions.destroy', [$quiz, $question]) }}" method="POST" onsubmit="return confirm('Hapus pertanyaan ini?');" style="margin: 0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-action-delete">
+                                        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                         <ul style="list-style: none; padding-left: 1rem; color: #4b5563;">
                             @foreach($question->options as $option)
                                 <li style="{{ $option->is_correct ? 'color: #16a34a; font-weight: 600;' : '' }}">

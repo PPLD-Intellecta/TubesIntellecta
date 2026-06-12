@@ -91,6 +91,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'show'])->name('quizzes.show');
         Route::delete('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'destroy'])->name('quizzes.destroy');
         Route::post('/quizzes/{quiz}/questions', [\App\Http\Controllers\Teacher\QuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
+        Route::get('/quizzes/{quiz}/questions/{question}/edit', [\App\Http\Controllers\Teacher\QuizController::class, 'editQuestion'])->name('quizzes.questions.edit');
+        Route::put('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Teacher\QuizController::class, 'updateQuestion'])->name('quizzes.questions.update');
+        Route::delete('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Teacher\QuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
 
         Route::get('/materi', [\App\Http\Controllers\Teacher\MateriController::class, 'index'])->name('materi.index');
         Route::get('/materi/create', [\App\Http\Controllers\Teacher\MateriController::class, 'create'])->name('materi.create');

@@ -73,6 +73,53 @@ class QuizController extends Controller
         return redirect()->route('teacher.quizzes.show', $quiz)->with('success', 'Pertanyaan berhasil ditambahkan.');
     }
 
+    public function destroyQuestion(Quiz $quiz, Question $question)
+    {
+        if ($quiz->teacher_id !== auth()->id() || $question->quiz_id !== $quiz->id) {
+            abort(403);
+        }
+        $question->delete();
+        return redirect()->route('teacher.quizzes.show', $quiz)->with('success', 'Pertanyaan berhasil dihapus.');
+    }
+
+    public function editQuestion(Quiz $quiz, Question $question)
+    {
+        if ($quiz->teacher_id !== auth()->id() || $question->quiz_id !== $quiz->id) {
+            abort(403);
+        }
+        $question->load('options');
+        return view('teacher.quizzes.edit-question', compact('quiz', 'question'));
+    }
+
+    public function updateQuestion(Request $request, Quiz $quiz, Question $question)
+    {
+        if ($quiz->teacher_id !== auth()->id() || $question->quiz_id !== $quiz->id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'question_text' => 'required|string',
+            'options' => 'required|array|min:2',
+            'options.*' => 'required|string',
+            'correct_option' => 'required|integer|min:0',
+        ]);
+
+        $question->update([
+            'question_text' => $request->question_text,
+        ]);
+
+        $question->options()->delete();
+
+        foreach ($request->options as $index => $optionText) {
+            $question->options()->create([
+                'option_text' => $optionText,
+                'is_correct' => (int) $request->correct_option === $index,
+            ]);
+        }
+
+        return redirect()->route('teacher.quizzes.show', $quiz)->with('success', 'Pertanyaan berhasil diperbarui.');
+    }
+
     public function destroy(Quiz $quiz)
     {
         if ($quiz->teacher_id !== auth()->id()) {
