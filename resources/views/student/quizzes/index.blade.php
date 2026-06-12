@@ -166,7 +166,24 @@
                         <div class="teacher-avatar">{{ strtoupper(substr($quiz->teacher->name ?? 'T', 0, 1)) }}</div>
                         <span>{{ $quiz->teacher->name ?? 'Pengajar' }}</span>
                     </div>
-                    <a href="{{ route('student.quizzes.show', $quiz) }}" class="btn-start">Mulai Kerjakan →</a>
+                    @php
+    $attempt = \App\Models\QuizAttempt::where('user_id', auth()->id())
+        ->where('quiz_id', $quiz->id)
+        ->latest()
+        ->first();
+@endphp
+
+@if($attempt)
+    <a href="{{ route('student.quizzes.result', $attempt->id) }}" 
+       class="btn-start"
+       style="background:#16a34a;">
+        ✓ Sudah Dikerjakan
+    </a>
+@else
+    <a href="{{ route('student.quizzes.show', $quiz) }}" class="btn-start">
+        Mulai Kerjakan →
+    </a>
+@endif
                 </div>
             </div>
 

@@ -14,11 +14,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -26,26 +21,22 @@ class User extends Authenticatable
         'package',
     ];
 
-    /**
-     * Check if the user has a premium package.
-     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     public function isPremium(): bool
     {
         return $this->package === 'premium';
     }
 
-    /**
-     * Get the study goals for the user.
-     */
-    public function studyGoals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function studyGoals(): HasMany
     {
         return $this->hasMany(StudyGoal::class, 'student_id');
     }
 
-    /**
-     * Get the daily checkins for the user.
-     */
-    public function dailyCheckins(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function dailyCheckins(): HasMany
     {
         return $this->hasMany(DailyCheckin::class, 'student_id');
     }
@@ -58,44 +49,26 @@ class User extends Authenticatable
         return $this->hasMany(Forum::class);
     }
 
-    /**
-     * Get all chat messages sent by this user.
-     */
     public function chats(): HasMany
     {
         return $this->hasMany(Chat::class);
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function sentFeedbacks(): HasMany
+    {
+        return $this->hasMany(Feedback::class, 'teacher_id');
+    }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    public function receivedFeedbacks(): HasMany
+    {
+        return $this->hasMany(Feedback::class, 'student_id');
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function sentFeedbacks()
-    {
-        return $this->hasMany(Feedback::class, 'teacher_id');
-    }
-
-    public function receivedFeedbacks()
-    {
-        return $this->hasMany(Feedback::class, 'student_id');
     }
 }

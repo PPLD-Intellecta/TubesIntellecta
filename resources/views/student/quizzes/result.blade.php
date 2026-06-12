@@ -73,10 +73,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="{{ route('dashboard') }}" class="navbar-logo">Intellecta</a>
+        <a href="{{ route('student.dashboard') }}" class="navbar-logo">Intellecta</a>
         <div class="navbar-links">
             <a href="{{ route('student.quizzes.index') }}" class="active">My Courses</a>
-            <a href="{{ route('dashboard') }}">Dashboard</a>
+            <a href="{{ route('student.dashboard') }}">Dashboard</a>
             <a href="{{ route('student.planner.index') }}">Study Planner</a>
             <a href="{{ route('student.feedbacks.index') }}">Feedback</a>
         </div>
@@ -107,7 +107,9 @@
 
             <div class="result-actions">
                 <a href="{{ route('student.quizzes.index') }}" class="btn-primary">← Kembali ke Daftar Kuis</a>
-                <a href="{{ route('dashboard') }}" class="btn-secondary">Pergi ke Dashboard</a>
+                <a href="{{ route('student.dashboard') }}" class="btn-secondary">
+    Pergi ke Dashboard
+</a>
             </div>
         </div>
     </div>

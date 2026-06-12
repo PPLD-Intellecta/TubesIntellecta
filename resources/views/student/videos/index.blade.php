@@ -106,9 +106,6 @@ function enrichVideo($video) {
     
     // Progress
     $progress = 0;
-    if ($id % 3 === 0) {
-        $progress = (($id * 23) % 75) + 15; // 15% to 90%
-    }
     
     // Thumbnail based on category
     $thumbnails = [
@@ -134,6 +131,16 @@ function enrichVideo($video) {
         'thumbnail' => $thumbnail
     ];
 }
+
+$completedVideoIds = \App\Models\VideoProgress::where('user_id', auth()->id())
+    ->where('is_completed', true)
+    ->pluck('video_id')
+    ->toArray();
+
+$totalVideos = $videos->count();
+$totalCompletedVideos = count($completedVideoIds);
+$overallVideoProgress = $totalVideos > 0 ? round(($totalCompletedVideos / $totalVideos) * 100) : 0;
+
 @endphp
 
 <!DOCTYPE html>
@@ -675,6 +682,27 @@ function enrichVideo($video) {
                 <div class="greeting-subtitle">Pelajari berbagai topik development melalui video pembelajaran berkualitas tinggi.</div>
             </div>
 
+<div style="background: #ffffff; border: 1px solid #efe7ff; border-radius: 1.25rem; padding: 1.25rem; margin-bottom: 1.5rem; box-shadow: 0 4px 18px rgba(124, 58, 237, 0.04);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <div>
+            <div style="font-size: 1rem; font-weight: 800; color: #1f2937;">
+                Progress Materi Video
+            </div>
+            <div style="font-size: 0.8rem; color: #6b7280;">
+                {{ $totalCompletedVideos }} dari {{ $totalVideos }} video sudah selesai
+            </div>
+        </div>
+
+        <div style="background: #ede9fe; color: #7c3aed; padding: 0.5rem 0.85rem; border-radius: 999px; font-size: 0.85rem; font-weight: 800;">
+            {{ $overallVideoProgress }}%
+        </div>
+    </div>
+
+    <div style="width: 100%; height: 10px; background: #e9ddfb; border-radius: 999px; overflow: hidden;">
+        <div style="width: {{ $overallVideoProgress }}%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); border-radius: 999px;"></div>
+    </div>
+</div>
+
             <!-- Search bar with filter options -->
             <div class="video-search-container">
                 <div class="search-wrapper">
@@ -759,21 +787,17 @@ function enrichVideo($video) {
                                 </div>
                             </div>
 
-                            <!-- Progress Bar (If started) -->
-                            @if ($video->progress > 0)
-                                <div class="card-progress-container">
-                                    <div class="progress-bar-label">
-                                        <span>Progres Belajar</span>
-                                        <span>{{ $video->progress }}%</span>
-                                    </div>
-                                    <div class="progress-track">
-                                        <div class="progress-fill" style="width: {{ $video->progress }}%;"></div>
-                                    </div>
-                                </div>
-                            @endif
 
                             <div style="margin-top: auto;">
-                                <a href="{{ route('student.videos.show', $video->id) }}" class="btn-watch">Tonton Sekarang</a>
+                                @php
+    $isCompleted = in_array($video->id, $completedVideoIds ?? []);
+@endphp
+
+<a href="{{ route('student.videos.show', $video->id) }}" 
+   class="btn-watch"
+   style="{{ $isCompleted ? 'background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);' : '' }}">
+    {{ $isCompleted ? '✓ Tonton Ulang' : 'Tonton Sekarang' }}
+</a>
                             </div>
                         </div>
                     </div>
