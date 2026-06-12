@@ -15,6 +15,11 @@ class Video extends Model
         'url_video',
     ];
 
+    public function progress()
+{
+    return $this->hasMany(VideoProgress::class);
+}
+
     /**
      * Otomatis mengkonversi link YouTube biasa menjadi format Embed
      */

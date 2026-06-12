@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use App\Models\Video;
+use App\Models\VideoProgress;
 use Carbon\Carbon;
 
 class StudentDashboardController extends Controller
@@ -13,44 +15,53 @@ class StudentDashboardController extends Controller
     {
         $userId = auth()->id();
 
-        // Total quiz yang tersedia
         $totalQuizzes = Quiz::count();
 
-        // Jumlah quiz berbeda yang sudah dikerjakan siswa
         $completedQuizzes = QuizAttempt::where('user_id', $userId)
             ->distinct('quiz_id')
             ->count('quiz_id');
 
-        // Progress belajar berdasarkan quiz yang sudah dikerjakan
         $progressPercentage = $totalQuizzes > 0
             ? round(($completedQuizzes / $totalQuizzes) * 100)
             : 0;
 
-        // Rata-rata nilai quiz siswa
-        $averageScore = QuizAttempt::where('user_id', $userId)
-            ->avg('score');
-
+        $averageScore = QuizAttempt::where('user_id', $userId)->avg('score');
         $averageScore = $averageScore ? round($averageScore) : 0;
 
-        // Riwayat aktivitas quiz terbaru
+        $completedVideos = VideoProgress::where('user_id', $userId)
+            ->where('is_completed', true)
+            ->distinct('video_id')
+            ->count('video_id');
+
+        $totalVideos = Video::count();
+
+        $videoProgressPercentage = $totalVideos > 0
+            ? round(($completedVideos / $totalVideos) * 100)
+            : 0;
+
         $learningHistories = QuizAttempt::with('quiz')
             ->where('user_id', $userId)
             ->latest()
             ->take(5)
             ->get();
 
-        // Progress belajar mingguan berdasarkan jumlah quiz yang dikerjakan per hari
+        $videoHistories = VideoProgress::with('video')
+            ->where('user_id', $userId)
+            ->where('is_completed', true)
+            ->latest('completed_at')
+            ->take(5)
+            ->get();
+
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
         $weeklyAttempts = QuizAttempt::where('user_id', $userId)
-        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-        ->selectRaw("DAYOFWEEK(created_at) as day_number, COUNT(*) as total")
-        ->groupBy('day_number')
-        ->pluck('total', 'day_number')
-        ->toArray();
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->selectRaw("DAYOFWEEK(created_at) as day_number, COUNT(*) as total")
+            ->groupBy('day_number')
+            ->pluck('total', 'day_number')
+            ->toArray();
 
-        // MySQL DAYOFWEEK(): 1=Sunday, 2=Monday, 3=Tuesday, ..., 7=Saturday
         $weeklyProgress = [
             ['label' => 'SEN', 'total' => $weeklyAttempts[2] ?? 0],
             ['label' => 'SEL', 'total' => $weeklyAttempts[3] ?? 0],
@@ -73,15 +84,12 @@ class StudentDashboardController extends Controller
             ];
         });
 
-        // Streak belajar berdasarkan tanggal siswa mengerjakan quiz
         $activityDates = QuizAttempt::where('user_id', $userId)
             ->selectRaw('DATE(created_at) as activity_date')
             ->distinct()
             ->orderByDesc('activity_date')
             ->pluck('activity_date')
-            ->map(function ($date) {
-                return Carbon::parse($date)->format('Y-m-d');
-            })
+            ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
             ->toArray();
 
         $streakDays = 0;
@@ -97,7 +105,6 @@ class StudentDashboardController extends Controller
             }
         }
 
-        // Kalau hari ini belum ada aktivitas, streak tetap dihitung dari kemarin
         if ($streakDays === 0 && count($activityDates) > 0) {
             $yesterday = Carbon::yesterday();
 
@@ -112,40 +119,101 @@ class StudentDashboardController extends Controller
             }
         }
 
-        // Reward otomatis sederhana berdasarkan pencapaian siswa
+        $hasPerfectScore = QuizAttempt::where('user_id', $userId)
+            ->where('score', 100)
+            ->exists();
+
         $rewards = [];
+
+        if ($completedQuizzes >= 1) {
+            $rewards[] = [
+                'icon' => '⭐',
+                'title' => 'Quiz Pertama',
+                'description' => 'Didapat setelah menyelesaikan quiz pertama.'
+            ];
+        }
+
+        if ($hasPerfectScore) {
+            $rewards[] = [
+                'icon' => '💯',
+                'title' => 'Nilai Sempurna',
+                'description' => 'Didapat setelah memperoleh nilai 100 pada quiz.'
+            ];
+        }
+
+        if ($progressPercentage >= 100) {
+            $rewards[] = [
+                'icon' => '🎯',
+                'title' => 'Progress Master',
+                'description' => 'Didapat setelah menyelesaikan seluruh quiz yang tersedia.'
+            ];
+        }
+
+        if ($completedVideos >= 3) {
+            $rewards[] = [
+                'icon' => '📚',
+                'title' => 'Pembelajar Aktif',
+                'description' => 'Berhasil menyelesaikan 3 materi video.'
+            ];
+        }
+
+        if ($averageScore >= 70) {
+            $rewards[] = [
+                'icon' => '🏆',
+                'title' => 'Nilai Konsisten',
+                'description' => 'Mencapai rata-rata nilai minimal 70.'
+            ];
+        }
 
         if ($streakDays >= 7) {
             $rewards[] = [
-                'icon' => '🏅',
-                'title' => 'Streak 7 Hari',
-                'description' => 'Didapat setelah belajar 7 hari berturut-turut.'
+                'icon' => '🔥',
+                'title' => 'Streak Master',
+                'description' => 'Belajar selama 7 hari berturut-turut.'
             ];
         }
 
-        if ($progressPercentage >= 70) {
-            $rewards[] = [
-                'icon' => '🎯',
-                'title' => 'Target Tercapai',
-                'description' => 'Didapat setelah progress belajar mencapai 70%.'
-            ];
-        }
-
-        if ($completedQuizzes > 0) {
-            $rewards[] = [
-                'icon' => '⭐',
-                'title' => 'Quiz Selesai',
-                'description' => 'Didapat setelah menyelesaikan minimal satu quiz.'
-            ];
-        }
-
-        if ($averageScore >= 90) {
-            $rewards[] = [
+        $nextTargets = [
+            [
+                'icon' => '📚',
+                'title' => 'Pembelajar Aktif',
+                'description' => 'Selesaikan 3 materi video.',
+                'current' => $completedVideos,
+                'target' => 3,
+                'unit' => 'Materi',
+                'is_completed' => $completedVideos >= 3,
+            ],
+            [
                 'icon' => '🏆',
-                'title' => 'Nilai Unggul',
-                'description' => 'Didapat setelah rata-rata nilai quiz mencapai 90%.'
-            ];
-        }
+                'title' => 'Nilai Konsisten',
+                'description' => 'Capai rata-rata nilai kuis 70%.',
+                'current' => $averageScore,
+                'target' => 70,
+                'unit' => '%',
+                'is_completed' => $averageScore >= 70,
+            ],
+            [
+                'icon' => '🔥',
+                'title' => 'Streak Master',
+                'description' => 'Capai 7 hari aktivitas belajar.',
+                'current' => $streakDays,
+                'target' => 7,
+                'unit' => 'Hari',
+                'is_completed' => $streakDays >= 7,
+            ],
+        ];
+
+        $skillSummary = collect([
+            'Rata-rata Nilai Kuis' => $averageScore,
+            'Progress Kuis' => $progressPercentage,
+            'Progress Materi Video' => $videoProgressPercentage,
+        ])->map(fn($score) => round($score));
+
+        $upcomingDeadlines = Quiz::whereNotNull('deadline')
+            ->where('deadline', '>=', now())
+            ->orderBy('deadline')
+            ->take(5)
+            ->get();
 
         return view('student.dashboard', compact(
             'totalQuizzes',
@@ -153,9 +221,13 @@ class StudentDashboardController extends Controller
             'progressPercentage',
             'averageScore',
             'learningHistories',
+            'videoHistories',
             'weeklyProgress',
             'streakDays',
-            'rewards'
+            'rewards',
+            'skillSummary',
+            'upcomingDeadlines',
+            'nextTargets'
         ));
     }
 }

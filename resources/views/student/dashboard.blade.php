@@ -120,7 +120,7 @@
             </div>
 
             <!-- Layout Utama Fleksibel -->
-            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 1.5rem; align-items: start;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 1.5rem; align-items: start; max-width: 100%;">
                 <!-- Kolom Kiri -->
                 <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
                     <!-- Streak + Progress -->
@@ -291,119 +291,193 @@
                         </div>
                     </div>
 
-                    <!-- Riwayat Aktivitas -->
-                    <div style="background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 28px rgba(0,0,0,0.06);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                            <div>
-                                <h3 style="font-size: 1.2rem; font-weight: 800; color: #1f2937; margin: 0;">
-                                    Riwayat Aktivitas
-                                </h3>
-                                <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
-                                    Aktivitas quiz terbaru siswa
-                                </div>
+                   <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+    @if($learningHistories->count() > 0)
+        <div style="background:#faf7ff; border:1px solid #ede9fe; border-radius:1.25rem; padding:1rem;">
+            <div style="margin-bottom:0.85rem;">
+                <div style="font-size:1rem; font-weight:800; color:#1f2937;">
+                    Riwayat Kuis
+                </div>
+                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">
+                    Hasil evaluasi yang telah dikerjakan
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                @foreach($learningHistories as $history)
+                    <div style="background:#ffffff; border:1px solid #ede9fe; border-radius:1rem; padding:1rem 1.1rem; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                        <div style="display:flex; align-items:center; gap:0.85rem;">
+                            <div style="width:44px; height:44px; border-radius:0.9rem; background:#ede9fe; display:flex; align-items:center; justify-content:center; font-size:1.15rem;">
+                                📝
                             </div>
 
-                            <div style="background: #f3f0ff; color: #7c3aed; padding: 0.55rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 800;">
-                                {{ isset($learningHistories) ? $learningHistories->count() : 0 }} Aktivitas
+                            <div>
+                                <div style="font-size:0.95rem; font-weight:800; color:#1f2937;">
+                                    {{ $history->quiz->title ?? 'Quiz Tidak Ditemukan' }}
+                                </div>
+                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">
+                                    Dikerjakan pada {{ \Carbon\Carbon::parse($history->created_at)->format('d M Y, H:i') }}
+                                </div>
                             </div>
                         </div>
 
-                        @if(isset($learningHistories) && $learningHistories->count() > 0)
-                            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
-                                @foreach($learningHistories as $history)
-                                    <div style="background: #faf7ff; border: 1px solid #ede9fe; border-radius: 1rem; padding: 1rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
-                                        <div style="display: flex; align-items: center; gap: 0.85rem;">
-                                            <div style="width: 44px; height: 44px; border-radius: 0.9rem; background: #ede9fe; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
-                                                📝
-                                            </div>
-
-                                            <div>
-                                                <div style="font-size: 0.95rem; font-weight: 800; color: #1f2937;">
-                                                    {{ $history->quiz->title ?? 'Quiz Tidak Ditemukan' }}
-                                                </div>
-                                                <div style="font-size: 0.78rem; color: #6b7280; margin-top: 0.2rem;">
-                                                    Dikerjakan pada {{ $history->created_at->format('d M Y, H:i') }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style="background: #7c3aed; color: #ffffff; padding: 0.48rem 0.8rem; border-radius: 999px; font-size: 0.85rem; font-weight: 800; white-space: nowrap;">
-                                            Nilai {{ $history->score }}%
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div style="background: #f9fafb; border-radius: 1.2rem; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                                <div style="width: 44px; height: 44px; border-radius: 0.9rem; background: #ede9fe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                                    📭
-                                </div>
-
-                                <div>
-                                    <div style="font-size: 0.95rem; font-weight: 800; color: #1f2937;">
-                                        Belum ada riwayat belajar
-                                    </div>
-                                    <div style="font-size: 0.82rem; color: #6b7280; margin-top: 0.25rem;">
-                                        Kerjakan quiz terlebih dahulu agar progress dan riwayat aktivitas belajar muncul.
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        <div style="background:#7c3aed; color:white; padding:0.48rem 0.8rem; border-radius:999px; font-size:0.85rem; font-weight:800;">
+                            Nilai {{ $history->score }}%
+                        </div>
                     </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
+    @if($videoHistories->count() > 0)
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:1.25rem; padding:1rem;">
+            <div style="margin-bottom:0.85rem;">
+                <div style="font-size:1rem; font-weight:800; color:#1f2937;">
+                    Riwayat Materi Video
+                </div>
+                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">
+                    Materi yang telah diselesaikan
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                @foreach($videoHistories as $videoHistory)
+                    <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:1rem; padding:1rem 1.1rem; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                        <div style="display:flex; align-items:center; gap:0.85rem;">
+                            <div style="width:44px; height:44px; border-radius:0.9rem; background:#dcfce7; display:flex; align-items:center; justify-content:center; font-size:1.15rem;">
+                                🎥
+                            </div>
+
+                            <div>
+                                <div style="font-size:0.95rem; font-weight:800; color:#1f2937;">
+                                    {{ $videoHistory->video->title ?? 'Materi Video Tidak Ditemukan' }}
+                                </div>
+                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">
+                                    Diselesaikan pada {{ $videoHistory->completed_at 
+                                        ? \Carbon\Carbon::parse($videoHistory->completed_at)->format('d M Y, H:i') 
+                                        : \Carbon\Carbon::parse($videoHistory->updated_at)->format('d M Y, H:i') 
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background:#16a34a; color:white; padding:0.48rem 0.8rem; border-radius:999px; font-size:0.85rem; font-weight:800;">
+                            Selesai
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+</div>
+                    
                     <!-- Reward Belajar -->
-                    <div style="background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 28px rgba(0,0,0,0.06);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                            <div>
-                                <h3 style="font-size: 1.2rem; font-weight: 800; color: #1f2937; margin: 0;">
-                                    Reward Belajar
-                                </h3>
-                                <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
-                                    Penghargaan berdasarkan pencapaian belajar siswa
-                                </div>
-                            </div>
+<div style="background:#ffffff; border-radius:1.5rem; padding:1.5rem; box-shadow:0 10px 28px rgba(0,0,0,0.06);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div>
+            <h3 style="font-size:1.2rem; font-weight:800; color:#1f2937; margin:0;">
+                Reward Belajar
+            </h3>
+            <div style="font-size:0.85rem; color:#6b7280; margin-top:0.25rem;">
+                Badge dan pencapaian berdasarkan aktivitas belajar siswa
+            </div>
+        </div>
 
-                            <div style="background: #fef3c7; color: #92400e; padding: 0.55rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 800;">
-                                {{ isset($rewards) ? count($rewards) : 0 }} Reward
-                            </div>
-                        </div>
+        <div style="background:#fef3c7; color:#92400e; padding:0.55rem 0.9rem; border-radius:999px; font-size:0.85rem; font-weight:800;">
+            {{ isset($rewards) ? count($rewards) : 0 }} Reward
+        </div>
+    </div>
 
-                        @if(isset($rewards) && count($rewards) > 0)
-                            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;">
-                                @foreach($rewards as $reward)
-                                    <div style="background: linear-gradient(135deg, #fff7ed, #faf7ff); border: 1px solid #f3e8ff; border-radius: 1.2rem; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-                                        <div style="width: 52px; height: 52px; border-radius: 1rem; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0;">
-                                            {{ $reward['icon'] }}
-                                        </div>
+    <!-- Reward Utama -->
+    <div style="background:linear-gradient(135deg,#faf7ff,#fff7ed); border:1px solid #f3e8ff; border-radius:1.25rem; padding:1.25rem; margin-bottom:1.25rem;">
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <div style="width:64px; height:64px; border-radius:1.2rem; background:#fef3c7; display:flex; align-items:center; justify-content:center; font-size:2rem;">
+                🏆
+            </div>
 
-                                        <div>
-                                            <div style="font-size: 0.95rem; font-weight: 800; color: #1f2937;">
-                                                {{ $reward['title'] }}
-                                            </div>
-                                            <div style="font-size: 0.78rem; color: #6b7280; margin-top: 0.25rem;">
-                                                {{ $reward['description'] }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div style="background: #f9fafb; border-radius: 1.2rem; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                                <div style="width: 44px; height: 44px; border-radius: 0.9rem; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                                    🎁
-                                </div>
+            <div style="flex:1;">
+                <div style="font-size:1.05rem; font-weight:900; color:#1f2937;">
+                    Champion Learner
+                </div>
+                <div style="font-size:0.82rem; color:#6b7280; margin-top:0.25rem;">
+                    Diperoleh dari progres belajar dan penyelesaian kuis.
+                </div>
 
-                                <div>
-                                    <div style="font-size: 0.95rem; font-weight: 800; color: #1f2937;">
-                                        Belum ada reward
-                                    </div>
-                                    <div style="font-size: 0.82rem; color: #6b7280; margin-top: 0.25rem;">
-                                        Selesaikan quiz atau capai target belajar untuk mendapatkan reward.
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                <div style="margin-top:0.85rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#6b7280; margin-bottom:0.35rem;">
+                        <span>Progress Belajar</span>
+                        <span>{{ $progressPercentage ?? 0 }}%</span>
                     </div>
+                    <div style="height:8px; background:#e9ddfb; border-radius:999px; overflow:hidden;">
+                        <div style="width:{{ $progressPercentage ?? 0 }}%; height:100%; background:linear-gradient(90deg,#7c3aed,#a855f7); border-radius:999px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Koleksi Badge -->
+    <div style="margin-bottom:1.25rem;">
+        <div style="font-size:0.95rem; font-weight:800; color:#1f2937; margin-bottom:0.75rem;">
+            Koleksi Badge
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:0.75rem;">
+            @forelse($rewards as $reward)
+                <div style="background:#faf7ff; border:1px solid #f3e8ff; border-radius:1rem; padding:0.85rem; text-align:center;">
+                    <div style="font-size:1.6rem; margin-bottom:0.45rem;">
+                        {{ $reward['icon'] }}
+                    </div>
+                    <div style="font-size:0.78rem; font-weight:800; color:#1f2937;">
+                        {{ $reward['title'] }}
+                    </div>
+                    <div style="font-size:0.68rem; color:#6b7280; margin-top:0.25rem;">
+                        {{ $reward['description'] }}
+                    </div>
+                </div>
+            @empty
+                <div style="grid-column:1/-1; background:#f9fafb; border-radius:1rem; padding:1rem; color:#6b7280; font-size:0.85rem;">
+                    Belum ada reward. Kerjakan kuis atau selesaikan materi video terlebih dahulu.
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+                    <!-- Target Berikutnya -->
+<div style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:1.25rem; padding:1rem;">
+    <div style="font-size:0.95rem; font-weight:800; color:#1f2937; margin-bottom:0.85rem;">
+        Target Berikutnya
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:0.85rem;">
+        @foreach($nextTargets as $target)
+            <div style="background:#ffffff; border:1px solid #e5e7eb; border-radius:1rem; padding:0.9rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                    <div>
+                        <div style="font-size:0.9rem; font-weight:800; color:#1f2937;">
+                            {{ $target['icon'] }} {{ $target['title'] }}
+                        </div>
+                        <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">
+                            {{ $target['description'] }}
+                        </div>
+                    </div>
+
+                    <div style="font-size:0.78rem; font-weight:800; color:{{ $target['is_completed'] ? '#16a34a' : '#7c3aed' }}; white-space:nowrap;">
+                        {{ $target['is_completed'] ? 'Tercapai' : $target['current'].'/'.$target['target'].' '.$target['unit'] }}
+                    </div>
+                </div>
+
+                <div style="height:8px; background:#e9ddfb; border-radius:999px; overflow:hidden; margin-top:0.75rem;">
+                    <div style="width:{{ min(($target['current'] / $target['target']) * 100, 100) }}%; height:100%; background:{{ $target['is_completed'] ? '#16a34a' : '#7c3aed' }}; border-radius:999px;"></div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+</div>
 
                     <!-- Courses Section -->
                     <div class="courses-section">
@@ -443,116 +517,77 @@
                 </div>
 
                 <!-- Kolom Kanan -->
-                <aside style="position: sticky; top: 1.5rem;">
-                    <!-- Ringkasan Keahlian -->
-                    <div style="background: linear-gradient(180deg, #7c3aed 0%, #8b5cf6 100%); border-radius: 1.5rem; padding: 1.5rem; color: #ffffff; box-shadow: 0 10px 28px rgba(124, 58, 237, 0.20);">
-                        <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 1.5rem;">
-                            Ringkasan Keahlian
-                        </h3>
+<aside style="position: sticky; top: 1.5rem; width: 360px; max-width: 360px;">
+    <!-- Ringkasan Keahlian -->
+    <div style="background: linear-gradient(180deg, #7c3aed 0%, #8b5cf6 100%); border-radius: 1.5rem; padding: 1.5rem; color: #ffffff; box-shadow: 0 10px 28px rgba(124, 58, 237, 0.20);">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 1.5rem;">
+            Ringkasan Keahlian
+        </h3>
 
-                        <div style="margin-bottom: 1.2rem;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.45rem;">
-                                <span>UI/UX Design</span>
-                                <span>85%</span>
-                            </div>
-                            <div style="height: 8px; background: rgba(255,255,255,0.22); border-radius: 999px;">
-                                <div style="width: 85%; height: 100%; background: #67e8f9; border-radius: 999px;"></div>
-                            </div>
-                        </div>
+        @if(isset($skillSummary) && collect($skillSummary)->sum() > 0)
 
-                        <div style="margin-bottom: 1.2rem;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.45rem;">
-                                <span>Front-End Dev</span>
-                                <span>60%</span>
-                            </div>
-                            <div style="height: 8px; background: rgba(255,255,255,0.22); border-radius: 999px;">
-                                <div style="width: 60%; height: 100%; background: #67e8f9; border-radius: 999px;"></div>
-                            </div>
-                        </div>
+    @foreach($skillSummary as $skill => $score)
 
-                        <div style="margin-bottom: 1.4rem;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.45rem;">
-                                <span>Product Mgmt</span>
-                                <span>40%</span>
-                            </div>
-                            <div style="height: 8px; background: rgba(255,255,255,0.22); border-radius: 999px;">
-                                <div style="width: 40%; height: 100%; background: #67e8f9; border-radius: 999px;"></div>
-                            </div>
-                        </div>
+        @if($score > 0)
+            <div style="margin-bottom: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.45rem;">
+                    <span>{{ $skill }}</span>
+                    <span>{{ $score }}%</span>
+                </div>
 
-                        <!-- Deadline Mendatang -->
-                        <div style="margin-top: 1.5rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.22);">
-                            <div style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); border-radius: 1.25rem; padding: 1rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
-                                    <div>
-                                        <div style="font-size: 1rem; font-weight: 800; color: #ffffff;">
-                                            Deadline Mendatang
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.75); margin-top: 0.25rem;">
-                                            Jadwal tugas terdekat
-                                        </div>
-                                    </div>
-
-                                    <div style="background: rgba(255,255,255,0.16); color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.35rem 0.65rem; border-radius: 999px; white-space: nowrap;">
-                                        3 Deadline
-                                    </div>
-                                </div>
-
-                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.11); border-radius: 1rem; padding: 0.75rem;">
-                                        <div style="width: 42px; height: 42px; border-radius: 0.85rem; background: #fde2e2; color: #dc2626; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; line-height: 1;">
-                                            <span style="font-size: 0.9rem;">24</span>
-                                            <span style="font-size: 0.58rem; margin-top: 0.15rem;">OKT</span>
-                                        </div>
-
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 0.85rem; color: #ffffff;">
-                                                Final Case Study
-                                            </div>
-                                            <div style="font-size: 0.72rem; color: rgba(255,255,255,0.75); margin-top: 0.15rem;">
-                                                UI Design • 23:59 WIB
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.11); border-radius: 1rem; padding: 0.75rem;">
-                                        <div style="width: 42px; height: 42px; border-radius: 0.85rem; background: #efe7ff; color: #7c3aed; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; line-height: 1;">
-                                            <span style="font-size: 0.9rem;">28</span>
-                                            <span style="font-size: 0.58rem; margin-top: 0.15rem;">OKT</span>
-                                        </div>
-
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 0.85rem; color: #ffffff;">
-                                                Quiz API Rest
-                                            </div>
-                                            <div style="font-size: 0.72rem; color: rgba(255,255,255,0.75); margin-top: 0.15rem;">
-                                                Backend Fundamentals
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.11); border-radius: 1rem; padding: 0.75rem;">
-                                        <div style="width: 42px; height: 42px; border-radius: 0.85rem; background: #f1eafd; color: #8b5cf6; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; line-height: 1;">
-                                            <span style="font-size: 0.9rem;">30</span>
-                                            <span style="font-size: 0.58rem; margin-top: 0.15rem;">OKT</span>
-                                        </div>
-
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 0.85rem; color: #ffffff;">
-                                                Refleksi Belajar
-                                            </div>
-                                            <div style="font-size: 0.72rem; color: rgba(255,255,255,0.75); margin-top: 0.15rem;">
-                                                Self Development
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
+                <div style="height: 8px; background: rgba(255,255,255,0.22); border-radius: 999px;">
+                    <div style="width: {{ $score }}%; height: 100%; background: #67e8f9; border-radius: 999px;"></div>
+                </div>
             </div>
+        @endif
 
+    @endforeach
+
+@else
+    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.8); margin-bottom: 1.4rem;">
+        Belum ada data keahlian. Kerjakan quiz terlebih dahulu.
+    </div>
+@endif
+
+        <!-- Deadline Mendatang -->
+<div style="margin-top: 1.5rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.22);">
+    <div style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); border-radius: 1.25rem; padding: 1rem;">
+        <div style="font-size: 1rem; font-weight: 800; color: #ffffff;">
+            Deadline Mendatang
+        </div>
+        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.75); margin-top: 0.25rem;">
+            Jadwal tugas terdekat
+        </div>
+
+        @if(isset($upcomingDeadlines) && $upcomingDeadlines->count() > 0)
+    <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+        @foreach($upcomingDeadlines as $quiz)
+            <div style="background:rgba(255,255,255,0.14); border-radius:0.85rem; padding:0.8rem;">
+                <div style="font-size:0.85rem; font-weight:800; color:#ffffff;">
+                    {{ $quiz->title }}
+                </div>
+                <div style="font-size:0.75rem; color:rgba(255,255,255,0.78); margin-top:0.25rem;">
+                    Deadline: {{ \Carbon\Carbon::parse($quiz->deadline)->format('d M Y, H:i') }}
+                </div>
+            </div>
+        @endforeach
+    </div>
+@else
+    <div style="text-align:center; padding:1.25rem 0.5rem; margin-top: 1rem;">
+        <div style="font-size:2rem;">📅</div>
+        <div style="font-weight:800; margin-top:0.5rem; color:#ffffff;">
+            Belum ada deadline
+        </div>
+        <div style="font-size:0.8rem; color:rgba(255,255,255,0.75); margin-top:0.35rem;">
+            Deadline akan muncul setelah guru membuat tugas atau quiz.
+        </div>
+    </div>
+@endif
+    </div>
+</div>
+    </div>
+</aside>
+</div>
             <!-- Footer -->
             <footer class="dashboard-footer" style="margin-top: 2rem;">
                 <div>

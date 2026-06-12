@@ -22,12 +22,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
 });
 Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
-    ->middleware(['auth']);
+    ->middleware(['auth', 'role:student'])
+    ->name('student.dashboard');
 
 Route::get('/', function () {
     return redirect('/register');
-Route::resource('paket-berlangganan', PaketBerlanggananController::class);
 });
+
+Route::resource('paket-berlangganan', PaketBerlanggananController::class);
 
 Route::get('/dashboard', function () {
 
@@ -66,8 +68,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/quizzes/result/{attempt}', [\App\Http\Controllers\Student\QuizController::class, 'result'])->name('quizzes.result');
         
         // Student Video routes
-        Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
-        Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])->name('videos.show');
+        Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])
+            ->name('videos.index');
+
+        Route::get('/videos/{video}', [\App\Http\Controllers\Student\VideoController::class, 'show'])
+            ->name('videos.show');
+
+        Route::post('/videos/{video}/complete', [\App\Http\Controllers\Student\VideoController::class, 'complete'])
+            ->name('videos.complete');
 
         // Student Feedback routes
         Route::get('/feedbacks', [\App\Http\Controllers\Student\FeedbackController::class, 'index'])->name('feedbacks.index');

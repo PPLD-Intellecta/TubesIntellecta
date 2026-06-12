@@ -171,6 +171,7 @@ $allVideos = \App\Models\Video::all();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Intellecta - {{ $enrichedVideo->title }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -1167,18 +1168,6 @@ $allVideos = \App\Models\Video::all();
                         Study Planner
                     </a>
                 </li>
-
-                <li class="sidebar-menu-item" style="margin-top: 2rem;">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="sidebar-menu-link" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer; color: #ef4444;">
-                            <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24" style="color: #ef4444;">
-                                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-                            </svg>
-                            Logout
-                        </button>
-                    </form>
-                </li>
             </ul>
         </aside>
 
@@ -1309,10 +1298,24 @@ $allVideos = \App\Models\Video::all();
                                     <span>Download</span>
                                 </button>
                                 
-                                <button class="action-pill-btn" id="stage-complete-btn" style="border: none;">
-                                    <i class="fa-regular fa-circle-check" id="complete-icon"></i>
-                                    <span id="complete-text">Selesai Belajar</span>
-                                </button>
+                                <form method="POST" action="{{ route('student.videos.complete', $video->id) }}">
+    @csrf
+
+    @php
+        $isCompleted = isset($progress) && $progress?->is_completed;
+    @endphp
+
+    <button
+        type="submit"
+        class="action-pill-btn {{ $isCompleted ? 'completed' : '' }}"
+        style="border: none; {{ $isCompleted ? 'background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white;' : '' }}"
+    >
+        <i class="{{ $isCompleted ? 'fa-solid fa-rotate-left' : 'fa-regular fa-circle-check' }}"></i>
+        <span>
+            {{ $isCompleted ? 'Batalkan Selesai' : 'Selesai Belajar' }}
+        </span>
+    </button>
+</form>
                             </div>
                         </div>
 
@@ -1460,26 +1463,6 @@ $allVideos = \App\Models\Video::all();
 
                 <!-- Right Column (30%): Playlist Sidebar -->
                 <aside class="playlist-sidebar-box">
-                    <div class="playlist-progress-header">
-                        <div class="playlist-progress-info">
-                            <span>PROGRES MATERI</span>
-                            <span id="playlist-progress-percentage">0% Selesai</span>
-                        </div>
-                        <div class="playlist-progress-track">
-                            <div class="playlist-progress-fill" id="playlist-progress-fill-bar" style="width: 0%;"></div>
-                        </div>
-                        
-                        <!-- Autoplay toggle -->
-                        <div class="autoplay-toggle-wrapper">
-                            <span class="autoplay-label">
-                                <i class="fa-solid fa-circle-play"></i> Auto-Play Video Berikutnya
-                            </span>
-                            <label class="switch-toggle">
-                                <input type="checkbox" id="autoplay-checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
 
                     <!-- List of videos in series -->
                     <div style="font-size: 0.85rem; font-weight: 800; color: #1f2937; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
@@ -1495,7 +1478,9 @@ $allVideos = \App\Models\Video::all();
                             @endphp
                             
                             <div class="playlist-item-card {{ $isActive ? 'active' : '' }}" data-id="{{ $playItem->id }}" data-url="{{ route('student.videos.show', $playItem->id) }}">
-                                <input type="checkbox" class="playlist-item-checkbox" data-id="{{ $playItem->id }}" title="Tandai Selesai">
+                                <span style="width: 18px; color: #9ca3af;">
+    ○
+</span>
                                 <div class="playlist-item-details">
                                     <div class="playlist-item-title">{{ $playItem->title }}</div>
                                     <div class="playlist-item-meta">
@@ -1523,15 +1508,10 @@ $allVideos = \App\Models\Video::all();
         // Data passed from backend PHP
         const videoId = {{ $enrichedVideo->id }};
         const videoDurationTotal = {{ $enrichedVideo->durationSeconds }};
-        
-        // Playlist list elements for auto-play logic
-        const playlistOrder = [
-            @foreach($allVideos as $item)
-                {{ $item->id }},
-            @endforeach
-        ];
+
 
         document.addEventListener('DOMContentLoaded', () => {
+
             // DOM Elements
             const playPauseBtn = document.getElementById('play-pause-btn');
             const playIcon = document.getElementById('play-icon');
@@ -1553,9 +1533,7 @@ $allVideos = \App\Models\Video::all();
             const playlistIcon = document.getElementById('playlist-icon');
             const shareBtn = document.getElementById('share-btn');
             const downloadBtn = document.getElementById('download-btn');
-            const stageCompleteBtn = document.getElementById('stage-complete-btn');
-            const completeIcon = document.getElementById('complete-icon');
-            const completeText = document.getElementById('complete-text');
+            
 
             // Tabs DOM Elements
             const tabTriggers = document.querySelectorAll('#tab-triggers-bar .tab-trigger-stage');
@@ -1572,10 +1550,6 @@ $allVideos = \App\Models\Video::all();
             const notesContainer = document.getElementById('saved-notes-box');
 
             // Playlist DOM Elements
-            const playlistProgressPercentage = document.getElementById('playlist-progress-percentage');
-            const playlistProgressFillBar = document.getElementById('playlist-progress-fill-bar');
-            const autoplayCheckbox = document.getElementById('autoplay-checkbox');
-            const playlistCheckboxes = document.querySelectorAll('.playlist-item-checkbox');
             const playlistCards = document.querySelectorAll('.playlist-item-card');
 
             // Local state variables
@@ -1585,7 +1559,6 @@ $allVideos = \App\Models\Video::all();
             let isCaptionsActive = false;
             let isLiked = false;
             let isSaved = false;
-            let isStageCompleted = false;
 
             // YouTube Player object initialization check
             let ytPlayer = null;
@@ -1857,27 +1830,9 @@ $allVideos = \App\Models\Video::all();
 
             // 2. VIDEO ENDED & AUTOPLAY NEXT VIDEO
             function handleVideoEnded() {
-                localStorage.removeItem(savedTimeKey); // Clear progress
-                markActiveVideoAsCompletedLocally(videoId);
-                
-                showToast("🏆 Video selesai! Menambahkan progres.");
-                
-                if (autoplayCheckbox.checked) {
-                    const currentIndex = playlistOrder.indexOf(videoId);
-                    if (currentIndex !== -1 && currentIndex < playlistOrder.length - 1) {
-                        const nextId = playlistOrder[currentIndex + 1];
-                        showToast("⏭️ Auto-Play: Membuka video berikutnya dalam 3 detik...");
-                        setTimeout(() => {
-                            const nextCard = document.querySelector(`.playlist-item-card[data-id="${nextId}"]`);
-                            if (nextCard) {
-                                window.location.href = nextCard.getAttribute('data-url');
-                            }
-                        }, 3000);
-                    } else {
-                        showToast("🏁 Anda telah menyelesaikan playlist seri pembelajaran ini!");
-                    }
-                }
-            }
+    localStorage.removeItem(savedTimeKey);
+    showToast("🏆 Video selesai! Klik tombol Selesai Belajar untuk menyimpan progres.");
+}
 
             // 3. QUICK ACTIONS (LIKE, SAVE, SHARE, DOWNLOAD, COMPLETE)
             likeBtn.addEventListener('click', () => {
@@ -1920,40 +1875,6 @@ $allVideos = \App\Models\Video::all();
                 showToast("📥 Menyiapkan download materi kualitas HD untuk luring...");
             });
 
-            stageCompleteBtn.addEventListener('click', () => {
-                isStageCompleted = !isStageCompleted;
-                toggleCompleteButtonState(isStageCompleted);
-                
-                // Toggle playlist item checkbox
-                const checkbox = document.querySelector(`.playlist-item-checkbox[data-id="${videoId}"]`);
-                if (checkbox) {
-                    checkbox.checked = isStageCompleted;
-                    handleCheckboxChange(videoId, isStageCompleted);
-                }
-            });
-
-            function toggleCompleteButtonState(completed) {
-                if (completed) {
-                    stageCompleteBtn.classList.add('completed');
-                    completeIcon.className = "fa-solid fa-circle-check";
-                    completeText.innerText = "✓ Sudah Selesai";
-                    showToast("🎉 Selamat! Selesai menonton materi ini.");
-                } else {
-                    stageCompleteBtn.classList.remove('completed');
-                    completeIcon.className = "fa-regular fa-circle-check";
-                    completeText.innerText = "Selesai Belajar";
-                }
-            }
-
-            function markActiveVideoAsCompletedLocally(id) {
-                isStageCompleted = true;
-                toggleCompleteButtonState(true);
-                const checkbox = document.querySelector(`.playlist-item-checkbox[data-id="${id}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                    handleCheckboxChange(id, true);
-                }
-            }
 
             // 4. INTERACTIVE TABS CLICK STATE
             tabTriggers.forEach(trigger => {
@@ -2098,55 +2019,6 @@ $allVideos = \App\Models\Video::all();
                 });
             }
 
-            // 7. PLAYLIST SIDEBAR COMPLETE & PROGRESS AUTO-UPDATE
-            const playlistStorageKey = 'intellecta_completed_videos_series';
-            let completedPlaylistIds = JSON.parse(localStorage.getItem(playlistStorageKey)) || [];
-
-            // Initialize checkboxes on load
-            playlistCheckboxes.forEach(box => {
-                const id = parseInt(box.getAttribute('data-id'));
-                const isCompleted = completedPlaylistIds.includes(id);
-                box.checked = isCompleted;
-                
-                if (id === videoId) {
-                    isStageCompleted = isCompleted;
-                    toggleCompleteButtonState(isStageCompleted);
-                }
-
-                box.addEventListener('change', (e) => {
-                    handleCheckboxChange(id, e.target.checked);
-                    if (id === videoId) {
-                        isStageCompleted = e.target.checked;
-                        toggleCompleteButtonState(isStageCompleted);
-                    }
-                });
-            });
-
-            function handleCheckboxChange(id, checked) {
-                if (checked) {
-                    if (!completedPlaylistIds.includes(id)) {
-                        completedPlaylistIds.push(id);
-                    }
-                } else {
-                    completedPlaylistIds = completedPlaylistIds.filter(item => item !== id);
-                }
-                localStorage.setItem(playlistStorageKey, JSON.stringify(completedPlaylistIds));
-                updatePlaylistProgressBar();
-            }
-
-            function updatePlaylistProgressBar() {
-                const totalItems = playlistCheckboxes.length;
-                if (totalItems === 0) return;
-                
-                const completedCount = completedPlaylistIds.length;
-                const percentage = Math.round((completedCount / totalItems) * 100);
-                
-                playlistProgressPercentage.innerText = `${completedCount} dari ${totalItems} Selesai (${percentage}%)`;
-                playlistProgressFillBar.style.width = `${percentage}%`;
-            }
-
-            // Initialize progress bar on load
-            updatePlaylistProgressBar();
 
             // Clicking playlist cards to navigate between videos
             playlistCards.forEach(card => {
