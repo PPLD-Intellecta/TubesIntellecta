@@ -41,6 +41,9 @@ class User extends Authenticatable
         return $this->hasMany(DailyCheckin::class, 'student_id');
     }
 
+    /**
+     * Get all forums created by this user.
+     */
     public function forums(): HasMany
     {
         return $this->hasMany(Forum::class);
