@@ -72,4 +72,15 @@ class QuizController extends Controller
 
         return redirect()->route('teacher.quizzes.show', $quiz)->with('success', 'Pertanyaan berhasil ditambahkan.');
     }
+
+    public function destroy(Quiz $quiz)
+    {
+        if ($quiz->teacher_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $quiz->delete();
+
+        return redirect()->route('teacher.quizzes.index')->with('success', 'Kuis berhasil dihapus.');
+    }
 }

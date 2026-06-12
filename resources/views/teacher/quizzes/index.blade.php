@@ -58,7 +58,14 @@
                     <div class="quiz-card">
                         <div class="quiz-title">{{ $quiz->title }}</div>
                         <p style="color: #6b7280; margin-bottom: 1rem;">{{ $quiz->description }}</p>
-                        <a href="{{ route('teacher.quizzes.show', $quiz) }}" class="btn-primary" style="background: #e5e7eb; color: #374151;">Kelola Pertanyaan</a>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <a href="{{ route('teacher.quizzes.show', $quiz) }}" class="btn-primary" style="background: #e5e7eb; color: #374151;">Kelola Pertanyaan</a>
+                            <form action="{{ route('teacher.quizzes.destroy', $quiz) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kuis ini? Semua pertanyaan di dalamnya juga akan terhapus.');" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-primary" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; cursor: pointer;">Hapus</button>
+                            </form>
+                        </div>
                     </div>
                 @empty
                     <p style="color: #6b7280;">Belum ada kuis yang dibuat.</p>
