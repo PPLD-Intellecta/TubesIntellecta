@@ -24,15 +24,30 @@
             <div class="sidebar-subtitle">Teacher Panel</div>
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item"><a href="{{ route('teacher.quizzes.index') }}" class="sidebar-menu-link active">Kelola Kuis</a></li>
+                <li class="sidebar-menu-item"><a href="{{ route('teacher.live-sessions.index') }}" class="sidebar-menu-link">Kelas Live</a></li>
                 <li class="sidebar-menu-item"><a href="{{ route('teacher.feedbacks.index') }}" class="sidebar-menu-link">Feedback</a></li>
+                <li class="sidebar-menu-item" style="margin-top: 2rem;">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="sidebar-menu-link" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer; color: #ef4444;">
+                            <svg class="sidebar-menu-icon" fill="currentColor" viewBox="0 0 24 24" style="color: #ef4444;">
+                                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
+                </li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="content-header">
-                <div class="greeting">{{ $quiz->title }}</div>
-                <div class="greeting-subtitle">{{ $quiz->description }}</div>
+            <div class="content-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div class="greeting">{{ $quiz->title }}</div>
+                    <div class="greeting-subtitle">{{ $quiz->description }}</div>
+                </div>
+                <a href="{{ route('teacher.quizzes.index') }}" class="btn-primary" style="background: #e5e7eb; color: #374151; text-decoration: none;">&larr; Kembali</a>
             </div>
 
             @if(session('success'))
