@@ -43,12 +43,18 @@ class StudentDashboardController extends Controller
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
-        $weeklyAttempts = QuizAttempt::where('user_id', $userId)
-        ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-        ->selectRaw("DAYOFWEEK(created_at) as day_number, COUNT(*) as total")
-        ->groupBy('day_number')
-        ->pluck('total', 'day_number')
-        ->toArray();
+        $weeklyAttemptsRaw = QuizAttempt::where('user_id', $userId)
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get(['created_at']);
+
+        $weeklyAttempts = [];
+        foreach ($weeklyAttemptsRaw as $attempt) {
+            $dayNumber = $attempt->created_at->dayOfWeek + 1; // Carbon dayOfWeek (Sunday=0) + 1 maps to Sunday=1, Monday=2, etc.
+            if (!isset($weeklyAttempts[$dayNumber])) {
+                $weeklyAttempts[$dayNumber] = 0;
+            }
+            $weeklyAttempts[$dayNumber]++;
+        }
 
         // MySQL DAYOFWEEK(): 1=Sunday, 2=Monday, 3=Tuesday, ..., 7=Saturday
         $weeklyProgress = [
