@@ -124,6 +124,20 @@ Route::prefix('student')->middleware(['auth', 'role:student'])->group(function (
     Route::get('/study-planner/calendar-data', [StudyPlannerController::class, 'calendarData'])->name('student.planner.calendar.data');
 });
 
+// (Kelola Paket Berlangganan - Sisi Admin)
+Route::get('/admin/kelola-paket', function () {
+    return view('admin.kelola_paket');
+})->name('admin.kelola-paket');
+
+// Rute Manajemen Forum (Sisi Admin - PBI-13)
+Route::get('/admin/forum', function () {
+    return view('admin.moderasi_forum');
+})->name('admin.forum.index');
+
+// Rute Sistem Notifikasi Belajar (Sisi Student - PBI-16)
+Route::get('/student/notifikasi', function () {
+    return view('student.notifikasi');
+})->name('student.notifikasi.index');
 
 
 // Akhir dari file web routes
