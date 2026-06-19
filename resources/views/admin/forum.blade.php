@@ -67,7 +67,58 @@
                 @endif
 
                 <!-- Stats Cards -->
-                <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-3  lg:grid-cols-6 gap-6 mb-8">
+                     <!-- Rata-rata Pesan -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-purple-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-xl">
+                            📊
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-900">
+                                {{ $averageChats }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Rata-rata Pesan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forum Teraktif -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-purple-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-xl">
+                            🔥
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">
+                                {{ $mostActiveForum?->chats_count ?? 0 }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Pesan Terbanyak
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nama Forum Teraktif -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-purple-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-xl">
+                            🏆
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-gray-900">
+                                {{ Str::limit($mostActiveForum?->title ?? '-', 15) }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Forum Teraktif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                     <div class="bg-white rounded-xl shadow-sm p-6 border border-purple-100">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-xl">📋</div>

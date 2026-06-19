@@ -13,14 +13,27 @@ class ForumController extends Controller
      * Display all forums for admin moderation.
      */
     public function index()
-    {
-        $forums = Forum::withCount('chats')
-            ->with('user')
-            ->latest()
-            ->get();
+{
+    $forums = Forum::withCount('chats')
+        ->with('user')
+        ->latest()
+        ->get();
 
-        return view('admin.forum', compact('forums'));
-    }
+    $totalForums = $forums->count();
+    $totalChats = $forums->sum('chats_count');
+
+    $averageChats = $totalForums > 0
+        ? round($totalChats / $totalForums, 1)
+        : 0;
+
+    $mostActiveForum = $forums->sortByDesc('chats_count')->first();
+
+    return view('admin.forum', compact(
+        'forums',
+        'averageChats',
+        'mostActiveForum'
+    ));
+}
 
     /**
      * Delete a chat message (moderation).

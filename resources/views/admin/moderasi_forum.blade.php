@@ -126,6 +126,36 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-6 mb-6">
+
+                        <div class="bg-white rounded-lg p-4 shadow">
+                            <p class="text-gray-500 text-sm">Komentar Dilaporkan</p>
+                            <h2 class="text-2xl font-bold text-red-500">12</h2>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-4 shadow">
+                            <p class="text-gray-500 text-sm">Komentar Dihapus</p>
+                            <h2 class="text-2xl font-bold text-green-500">8</h2>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-4 shadow">
+                            <p class="text-gray-500 text-sm">Laporan Diabaikan</p>
+                            <h2 class="text-2xl font-bold text-yellow-500">4</h2>
+                        </div>
+
+                    </div>
+                        <div class="mt-6 bg-white rounded-lg p-4">
+                            <h3 class="font-bold mb-2">
+                                👤 Pengguna Paling Aktif Melapor
+                            </h3>
+
+                            <ul class="space-y-2 text-sm">
+                                <li>🥇 Rian Hidayat (5 laporan)</li>
+                                <li>🥈 Dimas Saputra (3 laporan)</li>
+                                <li>🥉 Alya Putri (2 laporan)</li>
+                            </ul>
+                        </div>
 
                         <!-- Box Pedoman Konten -->
                         <div class="bg-gray-950 rounded-xl p-6 text-white shadow-sm">
