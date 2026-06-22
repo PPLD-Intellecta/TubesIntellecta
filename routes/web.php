@@ -64,6 +64,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Student\QuizController::class, 'show'])->name('quizzes.show');
         Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Student\QuizController::class, 'submit'])->name('quizzes.submit');
         Route::get('/quizzes/result/{attempt}', [\App\Http\Controllers\Student\QuizController::class, 'result'])->name('quizzes.result');
+
+        // Student Materi routes
+        Route::get('/materi', [\App\Http\Controllers\Student\MateriController::class, 'index'])->name('materi.index');
+        Route::get('/materi/{materi}/download', [\App\Http\Controllers\Student\MateriController::class, 'download'])->name('materi.download');
+        Route::get('/materi/{materi}', [\App\Http\Controllers\Student\MateriController::class, 'show'])->name('materi.show');
         
         // Student Video routes
         Route::get('/videos', [\App\Http\Controllers\Student\VideoController::class, 'index'])->name('videos.index');
@@ -84,16 +89,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/subscription/upgrade', [\App\Http\Controllers\SubscriptionController::class, 'upgrade'])->name('subscription.upgrade');
 
     // Teacher routes
-    Route::prefix('teacher')->name('teacher.')->group(function () {
+    Route::prefix('teacher')->name('teacher.')->middleware('role:teacher')->group(function () {
         Route::get('/quizzes', [\App\Http\Controllers\Teacher\QuizController::class, 'index'])->name('quizzes.index');
         Route::get('/quizzes/create', [\App\Http\Controllers\Teacher\QuizController::class, 'create'])->name('quizzes.create');
         Route::post('/quizzes', [\App\Http\Controllers\Teacher\QuizController::class, 'store'])->name('quizzes.store');
         Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'show'])->name('quizzes.show');
         Route::post('/quizzes/{quiz}/questions', [\App\Http\Controllers\Teacher\QuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
+        Route::get('/quizzes/{quiz}/questions/{question}/edit', [\App\Http\Controllers\Teacher\QuizController::class, 'editQuestion'])->name('quizzes.questions.edit');
+        Route::put('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Teacher\QuizController::class, 'updateQuestion'])->name('quizzes.questions.update');
+        Route::delete('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Teacher\QuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
 
         Route::get('/materi', [\App\Http\Controllers\Teacher\MateriController::class, 'index'])->name('materi.index');
         Route::get('/materi/create', [\App\Http\Controllers\Teacher\MateriController::class, 'create'])->name('materi.create');
         Route::post('/materi', [\App\Http\Controllers\Teacher\MateriController::class, 'store'])->name('materi.store');
+        Route::get('/materi/{materi}/edit', [\App\Http\Controllers\Teacher\MateriController::class, 'edit'])->name('materi.edit');
+        Route::get('/materi/{materi}/download', [\App\Http\Controllers\Teacher\MateriController::class, 'download'])->name('materi.download');
+        Route::get('/materi/{materi}', [\App\Http\Controllers\Teacher\MateriController::class, 'show'])->name('materi.show');
+        Route::put('/materi/{materi}', [\App\Http\Controllers\Teacher\MateriController::class, 'update'])->name('materi.update');
+        Route::delete('/materi/{materi}', [\App\Http\Controllers\Teacher\MateriController::class, 'destroy'])->name('materi.destroy');
 
         Route::resource('feedbacks', \App\Http\Controllers\Teacher\FeedbackController::class);
     });

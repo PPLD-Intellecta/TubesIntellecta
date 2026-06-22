@@ -6,6 +6,7 @@
     <title>Intellecta - Upload Materi</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <style>
         .form-group { margin-bottom: 1.5rem; }
@@ -144,15 +145,7 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="sidebar-logo">Intellecta</div>
-            <div class="sidebar-subtitle">Teacher Panel</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="{{ route('teacher.quizzes.index') }}" class="sidebar-menu-link">Kelola Kuis</a>
-                </li>
-            </ul>
-        </aside>
+        @include('teacher.partials.sidebar', ['active' => 'materi'])
 
         <main class="main-content">
             <div class="content-header">
@@ -201,13 +194,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>
                             <p class="upload-title">Pilih atau seret file ke sini</p>
-                            <p class="form-hint" style="margin-top: 0;">Format file: PDF, DOCX, PPTX, JPG, PNG. Maksimal 10MB.</p>
+                            <p class="form-hint" style="margin-top: 0;">Format file: PDF, DOC, DOCX, PPT, PPTX. Maksimal 20 MB.</p>
                             <input
                                 type="file"
                                 id="file_materi"
                                 name="file_materi"
                                 class="upload-file-input"
-                                accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+                                accept=".pdf,.doc,.docx,.ppt,.pptx"
                                 required
                             >
                             <span id="file-preview" class="file-preview" role="status" aria-live="polite"></span>
@@ -219,7 +212,7 @@
 
                     <div class="form-actions">
                         <button type="submit" class="btn-primary">Upload Materi</button>
-                        <a href="javascript:history.back()" class="btn-cancel">Batal</a>
+                        <a href="{{ route('teacher.materi.index') }}" class="btn-cancel">Batal</a>
                     </div>
                 </form>
             </div>

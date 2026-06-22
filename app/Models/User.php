@@ -98,4 +98,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Feedback::class, 'student_id');
     }
+
+    public function materi()
+    {
+        return $this->hasMany(Materi::class, 'uploaded_by');
+    }
 }
